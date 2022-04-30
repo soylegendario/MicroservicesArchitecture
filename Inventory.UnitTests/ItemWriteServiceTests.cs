@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using Inventory.Application.Services;
 using Inventory.Domain.Items;
+using Inventory.Infrastructure.Commands;
 using Inventory.Infrastructure.Exceptions;
+using Inventory.Infrastructure.Helpers.Cqrs.Commands;
 using Inventory.Infrastructure.Persistence;
 using Inventory.Infrastructure.Repository;
 using Microsoft.Extensions.Logging;
@@ -12,38 +14,28 @@ using NUnit.Framework;
 namespace Inventory.UnitTests;
 
 [TestFixture]
-public class ItemServiceTests
+public class ItemWriteServiceTests
 {
     private Mock<InventoryInMemoryContext> _inventoryInMemoryContextMock = null!;
-    private ItemInMemoryRepository _itemRepository = null!;
-    private ItemService _itemService = null!;
+    private ItemWriteService _itemWriteService = null!;
 
     [SetUp]
     public void SetUp()
     {
         _inventoryInMemoryContextMock = new Mock<InventoryInMemoryContext>();
-        _itemRepository = new ItemInMemoryRepository(Mock.Of<ILogger<ItemInMemoryRepository>>(),
+        var itemRepository = new ItemInMemoryRepository(Mock.Of<ILogger<ItemInMemoryRepository>>(),
             _inventoryInMemoryContextMock.Object);
-        _itemService = new ItemService(Mock.Of<ILogger<ItemService>>(), _itemRepository);
-    }
 
-    [Test]
-    public void GetAllItems_ReturnsAllItems()
-    {
-        // Arrange
-        var expected = new List<Item>
-        {
-            new() { Id = Guid.NewGuid(), Name = "Item 1"},
-            new() { Id = Guid.NewGuid(), Name = "Item 2"},
-            new() { Id = Guid.NewGuid(), Name = "Item 3"}
-        };
-        _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(expected);
-
-        // Act
-        var actual = _itemService.GetAllItems();
-
-        // Assert
-        Assert.AreEqual(expected, actual);
+        var serviceProvider = new Mock<IServiceProvider>();
+        serviceProvider.Setup(x => x.GetService(typeof(ICommandHandler<AddItemCommand>)))
+            .Returns(new AddItemCommandHandler(Mock.Of<ILogger<AddItemCommandHandler>>(),
+                itemRepository));
+        serviceProvider.Setup(x => x.GetService(typeof(ICommandHandler<RemoveItemByNameCommand>)))
+            .Returns(new RemoveItemByNameCommandHandler(Mock.Of<ILogger<RemoveItemByNameCommandHandler>>(),
+                itemRepository));
+        
+        _itemWriteService = new ItemWriteService(Mock.Of<ILogger<ItemWriteService>>(),
+            new CommandDispatcher(serviceProvider.Object));
     }
     
     [Test]
@@ -54,7 +46,7 @@ public class ItemServiceTests
         var item = new Item { Name = "Item 4"};
 
         // Act
-        _itemService.AddItem(item);
+        _itemWriteService.AddItem(item);
 
         // Assert
         Assert.NotNull(item.Id);
@@ -71,7 +63,7 @@ public class ItemServiceTests
         _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(expected);
         
         // Act&Assert
-        Assert.DoesNotThrow(() => _itemService.RemoveItemByName("Item 1"));
+        Assert.DoesNotThrow(() => _itemWriteService.RemoveItemByName("Item 1"));
     }
     
     [Test]
@@ -85,6 +77,6 @@ public class ItemServiceTests
         _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(expected);
         
         // Act&Assert
-        Assert.Throws<ItemNotFoundException>(() => _itemService.RemoveItemByName("Non-existent item"));
+        Assert.Throws<ItemNotFoundException>(() => _itemWriteService.RemoveItemByName("Non-existent item"));
     }
 }
