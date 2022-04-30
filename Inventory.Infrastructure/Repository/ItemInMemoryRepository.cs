@@ -31,7 +31,7 @@ public class ItemInMemoryRepository : IItemRepository
         }
     }
 
-    public IEnumerable<Item> GetAllItems()
+    public virtual IEnumerable<Item> GetAllItems()
     {
         try
         {

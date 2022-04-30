@@ -9,6 +9,6 @@ public class InventoryInMemoryContext
         Items = new List<Item>();
     }
 
-    public IList<Item> Items { get; }
+    public virtual IList<Item> Items { get; }
 
 }
