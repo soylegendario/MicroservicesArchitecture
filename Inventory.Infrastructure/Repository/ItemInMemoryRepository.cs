@@ -5,15 +5,15 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Infrastructure.Repository;
 
-public class ItemRepository : IItemRepository
+public class ItemInMemoryRepository : IItemRepository
 {
-    private readonly ILogger<ItemRepository> _logger;
-    private readonly IInventoryContext _inventoryContext;
+    private readonly ILogger<ItemInMemoryRepository> _logger;
+    private readonly InventoryInMemoryContext _context;
 
-    public ItemRepository(ILogger<ItemRepository> logger, IInventoryContext inventoryContext)
+    public ItemInMemoryRepository(ILogger<ItemInMemoryRepository> logger, InventoryInMemoryContext context)
     {
         _logger = logger;
-        _inventoryContext = inventoryContext;
+        _context = context;
     }
 
     public void AddItem(Item item)
@@ -22,7 +22,7 @@ public class ItemRepository : IItemRepository
         {
             _logger.LogInformation("Adding item to database");
             item.Id = Guid.NewGuid();
-            _inventoryContext.Items().Add(item);
+            _context.Items.Add(item);
         }
         catch (Exception e)
         {
@@ -35,7 +35,7 @@ public class ItemRepository : IItemRepository
     {
         try
         {
-            return _inventoryContext.Items();
+            return _context.Items;
         }
         catch (Exception e)
         {
@@ -49,13 +49,13 @@ public class ItemRepository : IItemRepository
         try
         {
             _logger.LogInformation("Removing item with name {Name} from database", name);
-            var item = _inventoryContext.Items().FirstOrDefault(i => i.Name == name);
+            var item = _context.Items.FirstOrDefault(i => i.Name == name);
             if (item is null)
             {
                 throw new ItemNotFoundException($"Item with name {name} not found");
             }
 
-            _inventoryContext.Items().Remove(item);
+            _context.Items.Remove(item);
         }
         catch (Exception e)
         {

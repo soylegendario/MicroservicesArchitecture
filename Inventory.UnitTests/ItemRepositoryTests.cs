@@ -14,15 +14,15 @@ namespace Inventory.UnitTests;
 public class ItemRepositoryTests
 {
     private IItemRepository _itemRepository = null!;
-    private IInventoryContext _inventoryContext = null!;
+    private InventoryInMemoryContext _inventoryContext = null!;
     private Item _item = null!;
 
     [SetUp]
     public void SetUp()
     {
-        _inventoryContext = new InMemoryInventoryContext();
-        var logger = Mock.Of<ILogger<ItemRepository>>();
-        _itemRepository = new ItemRepository(logger, _inventoryContext);
+        _inventoryContext = new InventoryInMemoryContext();
+        var logger = Mock.Of<ILogger<ItemInMemoryRepository>>();
+        _itemRepository = new ItemInMemoryRepository(logger, _inventoryContext);
         _item = new Item
         {
             Name = "Test Item", 
@@ -37,7 +37,7 @@ public class ItemRepositoryTests
         _itemRepository.AddItem(_item);
         
         // Assert
-        Assert.AreEqual(1, _inventoryContext.Items().Count);
+        Assert.AreEqual(1, _inventoryContext.Items.Count);
         Assert.NotNull(_item.Id);
         Assert.AreEqual(DateTime.UtcNow.AddDays(10).Date, _item.ExpirationDate.Date);
     }
@@ -57,13 +57,13 @@ public class ItemRepositoryTests
     public void CanRemoveItem()
     {
         // Arrange
-        _inventoryContext.Items().Add(_item);
+        _inventoryContext.Items.Add(_item);
         
         // Act
         _itemRepository.RemoveItemByName("Test Item");
     
         // Assert
-        Assert.AreEqual(0, _inventoryContext.Items().Count);
+        Assert.AreEqual(0, _inventoryContext.Items.Count);
     }
     
     [Test]
