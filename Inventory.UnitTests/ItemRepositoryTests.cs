@@ -1,8 +1,11 @@
 using System;
 using System.Linq;
 using Inventory.Domain.Items;
+using Inventory.Infrastructure.Exceptions;
 using Inventory.Infrastructure.Persistence;
 using Inventory.Infrastructure.Repository;
+using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
 
 namespace Inventory.UnitTests;
@@ -18,7 +21,8 @@ public class ItemRepositoryTests
     public void SetUp()
     {
         _inventoryContext = new InMemoryInventoryContext();
-        _itemRepository = new ItemRepository(_inventoryContext);
+        var logger = Mock.Of<ILogger<ItemRepository>>();
+        _itemRepository = new ItemRepository(logger, _inventoryContext);
         _item = new Item
         {
             Name = "Test Item", 
@@ -61,4 +65,11 @@ public class ItemRepositoryTests
         // Assert
         Assert.AreEqual(0, _inventoryContext.Items().Count);
     }
+    
+    [Test]
+    public void TryRemoveItemByName_ItemDoesNotExist_ThrowsItemNotFoundException()
+    {
+        Assert.Throws<ItemNotFoundException>(() => _itemRepository.RemoveItemByName("Non-existent Item"));
+    }
+    
 }
