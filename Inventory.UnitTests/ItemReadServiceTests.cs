@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Inventory.Application.Mappers.Items;
 using Inventory.Application.Services;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Helpers.Cqrs.Queries;
@@ -32,7 +34,7 @@ public class ItemReadServiceTests
                 itemRepository));
         
         _itemReadService = new ItemReadService(Mock.Of<ILogger<ItemReadService>>(),
-            new QueryDispatcher(serviceProvider.Object));
+            new QueryDispatcher(serviceProvider.Object), new ItemMapper(Mock.Of<ILogger<ItemMapper>>()));
     }
 
     [Test]
@@ -51,6 +53,6 @@ public class ItemReadServiceTests
         var actual = await _itemReadService.GetAllItems();
 
         // Assert
-        Assert.AreEqual(expected, actual);
+        actual.Should().BeEquivalentTo(expected);
     }
 }

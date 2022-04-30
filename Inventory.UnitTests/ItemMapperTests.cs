@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using Inventory.Application.Mappers.Items;
 using Inventory.Domain.Items;
+using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
 
 namespace Inventory.UnitTests;
@@ -14,7 +16,7 @@ public class ItemMapperTests
     [SetUp]
     public void SetUp()
     {
-        _itemMapperTests = new ItemMapper();
+        _itemMapperTests = new ItemMapper(Mock.Of<ILogger<ItemMapper>>());
     }
 
     [Test]
