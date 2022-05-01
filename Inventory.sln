@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
+#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Domain", "Inventory.Domain\Inventory.Domain.csproj", "{619AB9B4-10CD-486A-A22B-A908B2ACBBEF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Application", "Inventory.Application\Inventory.Application.csproj", "{CA2EAE52-34FF-4A42-8C91-7A8A72F985A8}"
@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Infrastructure", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.UnitTests", "Inventory.UnitTests\Inventory.UnitTests.csproj", "{C6813F25-4E65-44AB-B1D5-4D0075232215}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Api", "Inventory.Api\Inventory.Api.csproj", "{9B209A91-650B-4885-B77D-D59575CD46A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.MinimalApi", "Inventory.MinimalApi\Inventory.MinimalApi.csproj", "{9B209A91-650B-4885-B77D-D59575CD46A7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{1B585F07-05A3-40AA-A32C-D2079ED02D77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,5 +39,8 @@ Global
 		{9B209A91-650B-4885-B77D-D59575CD46A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B209A91-650B-4885-B77D-D59575CD46A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B209A91-650B-4885-B77D-D59575CD46A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9B209A91-650B-4885-B77D-D59575CD46A7} = {1B585F07-05A3-40AA-A32C-D2079ED02D77}
 	EndGlobalSection
 EndGlobal

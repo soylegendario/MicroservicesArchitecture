@@ -7,4 +7,5 @@ public interface IItemMapper
 {
     ItemDto Map(Item item);
     IEnumerable<ItemDto> Map(IEnumerable<Item> items);
+    Item Map(ItemDto itemDto);
 }

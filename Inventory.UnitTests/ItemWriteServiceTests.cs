@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Inventory.Application.Dto;
+using Inventory.Application.Mappers.Items;
 using Inventory.Application.Services;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Commands;
@@ -35,7 +37,7 @@ public class ItemWriteServiceTests
                 itemRepository));
         
         _itemWriteService = new ItemWriteService(Mock.Of<ILogger<ItemWriteService>>(),
-            new CommandDispatcher(serviceProvider.Object));
+            new CommandDispatcher(serviceProvider.Object), new ItemMapper(Mock.Of<ILogger<ItemMapper>>()));
     }
     
     [Test]
@@ -43,7 +45,7 @@ public class ItemWriteServiceTests
     {
         // Arrange
         _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(new List<Item>());
-        var item = new Item { Name = "Item 4"};
+        var item = new ItemDto { Name = "Item 4"};
 
         // Act
         _itemWriteService.AddItem(item);

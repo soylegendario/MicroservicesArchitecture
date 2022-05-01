@@ -30,4 +30,16 @@ public class ItemMapper : IItemMapper
         _logger.LogInformation("Mapping items to dto");
         return items.Select(Map).ToList();
     }
+
+    public Item Map(ItemDto itemDto)
+    {
+        _logger.LogInformation("Mapping dto to item");
+        var item = new Item
+        {
+            Id = itemDto.Id ?? Guid.Empty,
+            Name = itemDto.Name,
+            ExpirationDate = itemDto.ExpirationDate
+        };
+        return item;
+    }
 }

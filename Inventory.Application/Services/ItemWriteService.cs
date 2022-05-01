@@ -1,5 +1,6 @@
 using Inventory.Application.Contracts;
-using Inventory.Domain.Items;
+using Inventory.Application.Dto;
+using Inventory.Application.Mappers.Items;
 using Inventory.Infrastructure.Commands;
 using Inventory.Infrastructure.Helpers.Cqrs.Commands;
 using Microsoft.Extensions.Logging;
@@ -10,21 +11,23 @@ public class ItemWriteService : IItemWriteService
 {
     private readonly ILogger<ItemWriteService> _logger;
     private readonly ICommandDispatcher _commandDispatcher;
+    private readonly IItemMapper _itemMapper;
 
-    public ItemWriteService(ILogger<ItemWriteService> logger, ICommandDispatcher commandDispatcher)
+    public ItemWriteService(ILogger<ItemWriteService> logger, ICommandDispatcher commandDispatcher, IItemMapper itemMapper)
     {
         _logger = logger;
         _commandDispatcher = commandDispatcher;
+        _itemMapper = itemMapper;
     }
 
-    public Task AddItem(Item item)
+    public Task AddItem(ItemDto item)
     {
         try
         {
             _logger.LogInformation("Adding item");
             var command = new AddItemCommand()
             {
-                Item = item
+                Item = _itemMapper.Map(item)
             };
             return _commandDispatcher.DispatchAsync(command);
         }
