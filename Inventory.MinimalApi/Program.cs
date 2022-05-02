@@ -13,13 +13,46 @@ using Inventory.Infrastructure.Helpers.Events;
 using Inventory.Infrastructure.Persistence;
 using Inventory.Infrastructure.Queries;
 using Inventory.Infrastructure.Repository;
+using Inventory.MinimalApi.Authentication;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("basic", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "basic",
+        In = ParameterLocation.Header,
+        Description = "Basic Authorization header using the Bearer scheme."
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "basic"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
+
+services.AddAuthentication("BasicAuthentication")
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>
+        ("BasicAuthentication", null);
+services.AddAuthorization();
 
 services.AddSingleton<IEventBus, EventBus>();
 
@@ -48,6 +81,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Subscribe to events
 using (var scope = app.Services.CreateScope())
@@ -83,14 +118,18 @@ timer.Elapsed += async (_, _) =>
 timer.Enabled = true;
 timer.Start();
 
-app.MapGet("/items", async ([FromServices] IItemReadService itemReadService) =>
+app.MapGet("/items", 
+        [Authorize] 
+        async ([FromServices] IItemReadService itemReadService) =>
     {
         app.Logger.LogInformation("GET: /items");
         return await itemReadService.GetAllItems();
     })
     .WithName("GetItems");
 
-app.MapPost("/items", async ([FromBody] ItemDto item, [FromServices] IItemWriteService itemWriteService) =>
+app.MapPost("/items", 
+        [Authorize] 
+        async ([FromBody] ItemDto item, [FromServices] IItemWriteService itemWriteService) =>
     {
         app.Logger.LogInformation("POST: /items");
         await itemWriteService.AddItem(item);
@@ -98,7 +137,9 @@ app.MapPost("/items", async ([FromBody] ItemDto item, [FromServices] IItemWriteS
     })
     .WithName("PostItem");
 
-app.MapDelete("/items/{name}", async (string name, [FromServices] IItemWriteService itemWriteService) =>
+app.MapDelete("/items/{name}", 
+        [Authorize] 
+        async (string name, [FromServices] IItemWriteService itemWriteService) =>
     {
         try
         {
