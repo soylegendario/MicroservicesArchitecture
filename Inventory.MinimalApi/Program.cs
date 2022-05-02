@@ -65,7 +65,7 @@ using (var scope = app.Services.CreateScope())
 
 // Schedule a job to notify expired items
 var timer = new System.Timers.Timer(24 * 60 * 60 * 1000);
-timer.Elapsed += async (sender, args) =>
+timer.Elapsed += async (_, _) =>
 {
     try
     {
