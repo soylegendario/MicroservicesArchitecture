@@ -30,6 +30,7 @@ services.AddSingleton<IQueryDispatcher, QueryDispatcher>();
 services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
 
 services.AddTransient<IQueryHandler<GetAllItemsQuery, IEnumerable<Item>>, GetAllItemsQueryHandler>();
+services.AddTransient<IQueryHandler<GetItemsByExpirationDateQuery, IEnumerable<Item>>, GetItemsByExpirationDateQueryHandler>();
 services.AddTransient<ICommandHandler<AddItemCommand>, AddItemCommandHandler>();
 services.AddTransient<ICommandHandler<RemoveItemByNameCommand>, RemoveItemByNameCommandHandler>();
 
@@ -54,11 +55,33 @@ using (var scope = app.Services.CreateScope())
     var eventBus = scope.ServiceProvider.GetRequiredService<IEventBus>();
     eventBus.Subscribe<ItemRemovedEvent>(payload =>
     {
-        var itemRemoved = payload.Event.Name;
-        Console.WriteLine("Item with name {0} has been removed at {1}", itemRemoved, payload.Timestamp);
+        Console.WriteLine("Item with name {0} has been removed at {1}", payload.Event.Name, payload.Timestamp);
     });
-
+    eventBus.Subscribe<ItemExpiredEvent>(payload =>
+    {
+        Console.WriteLine("Item with name {0} has expired at {1}", payload.Event.Name, payload.Event.ExpirationDate);
+    });
 }
+
+// Schedule a job to notify expired items
+var timer = new System.Timers.Timer(24 * 60 * 60 * 1000);
+timer.Elapsed += async (sender, args) =>
+{
+    try
+    {
+        app.Logger.LogInformation("Executing scheduled job to notify expired items");
+        using var scope = app.Services.CreateScope();
+        var itemReadService = scope.ServiceProvider.GetRequiredService<IItemReadService>();
+        var itemsNotified = await itemReadService.NotifyExpiredItems();
+        app.Logger.LogInformation("{ItemsNotified} items have been notified", itemsNotified);
+    }
+    catch (Exception e)
+    {
+        app.Logger.LogError(e, "Error while executing scheduled job to notify expired items");
+    }
+};
+timer.Enabled = true;
+timer.Start();
 
 app.MapGet("/items", async () =>
     {

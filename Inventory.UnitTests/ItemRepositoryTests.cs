@@ -52,6 +52,23 @@ public class ItemRepositoryTests
         // Assert
         Assert.AreEqual(1, items.Count());
     }
+
+    [Test]
+    public void GetItemsByExpirationDate_ReturnsItemsWithGivenExpirationDate()
+    {
+        // Arrange
+        _itemRepository.AddItem(_item);
+        var expirationDate = DateTime.UtcNow.AddDays(1);
+        var item = new Item { ExpirationDate = expirationDate };
+        _itemRepository.AddItem(item);
+
+        // Act
+        var items = _itemRepository.GetItemsByExpirationDate(expirationDate).ToArray();
+
+        // Assert
+        Assert.AreEqual(1, items.Length);
+        Assert.AreEqual(expirationDate, items.First().ExpirationDate);
+    }
     
     [Test]
     public void CanRemoveItem()
@@ -67,7 +84,7 @@ public class ItemRepositoryTests
     }
     
     [Test]
-    public void TryRemoveItemByName_ItemDoesNotExist_ThrowsItemNotFoundException()
+    public void TryRemoveItemByName_WhenItemDoesNotExist_ThrowsItemNotFoundException()
     {
         Assert.Throws<ItemNotFoundException>(() => _itemRepository.RemoveItemByName("Non-existent Item"));
     }

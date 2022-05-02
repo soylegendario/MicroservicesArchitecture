@@ -44,6 +44,19 @@ public class ItemInMemoryRepository : IItemRepository
         }
     }
 
+    public IEnumerable<Item> GetItemsByExpirationDate(DateTime expirationDate)
+    {
+        try
+        {
+            return _context.Items.Where(i => i.ExpirationDate.Date == expirationDate.Date);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting items by expiration date from database");
+            throw;
+        }
+    }
+
     public void RemoveItemByName(string name)
     {
         try

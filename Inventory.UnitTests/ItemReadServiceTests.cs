@@ -6,6 +6,7 @@ using Inventory.Application.Mappers.Items;
 using Inventory.Application.Services;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Helpers.Cqrs.Queries;
+using Inventory.Infrastructure.Helpers.Events;
 using Inventory.Infrastructure.Persistence;
 using Inventory.Infrastructure.Queries;
 using Inventory.Infrastructure.Repository;
@@ -32,9 +33,13 @@ public class ItemReadServiceTests
         serviceProvider.Setup(x => x.GetService(typeof(IQueryHandler<GetAllItemsQuery, IEnumerable<Item>>)))
             .Returns(new GetAllItemsQueryHandler(Mock.Of<ILogger<GetAllItemsQueryHandler>>(),
                 itemRepository));
+        serviceProvider.Setup(x => x.GetService(typeof(IQueryHandler<GetItemsByExpirationDateQuery, IEnumerable<Item>>)))
+            .Returns(new GetItemsByExpirationDateQueryHandler(Mock.Of<ILogger<GetItemsByExpirationDateQueryHandler>>(),
+                itemRepository));
         
         _itemReadService = new ItemReadService(Mock.Of<ILogger<ItemReadService>>(),
-            new QueryDispatcher(serviceProvider.Object), new ItemMapper(Mock.Of<ILogger<ItemMapper>>()));
+            new QueryDispatcher(serviceProvider.Object), new ItemMapper(Mock.Of<ILogger<ItemMapper>>()),
+            Mock.Of<IEventBus>());
     }
 
     [Test]
@@ -54,5 +59,27 @@ public class ItemReadServiceTests
 
         // Assert
         actual.Should().BeEquivalentTo(expected);
+    }
+    
+    [Test]
+    public async Task NotifyExpiredItems_ReturnsAllExpiredItems()
+    {
+        // Arrange
+        var expected = new List<Item>
+        {
+            new() { Id = Guid.NewGuid(), Name = "Item 1", ExpirationDate = DateTime.Now.AddDays(-1)},
+            new() { Id = Guid.NewGuid(), Name = "Item 2", ExpirationDate = DateTime.Now.AddDays(-2)},
+            new() { Id = Guid.NewGuid(), Name = "Item 3", ExpirationDate = DateTime.Now.AddDays(-3)},
+            new() { Id = Guid.NewGuid(), Name = "Item 4", ExpirationDate = DateTime.Now.AddDays(1)},
+            new() { Id = Guid.NewGuid(), Name = "Item 5", ExpirationDate = DateTime.Now.AddDays(2)},
+            new() { Id = Guid.NewGuid(), Name = "Item 6", ExpirationDate = DateTime.Now.AddDays(3)}
+        };
+        _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(expected);
+
+        // Act
+        var expiredItems = await _itemReadService.NotifyExpiredItems();
+
+        // Assert
+        Assert.AreEqual(1, expiredItems);
     }
 }
