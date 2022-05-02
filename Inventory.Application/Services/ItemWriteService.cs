@@ -2,7 +2,9 @@ using Inventory.Application.Contracts;
 using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
 using Inventory.Infrastructure.Commands;
+using Inventory.Infrastructure.Events;
 using Inventory.Infrastructure.Helpers.Cqrs.Commands;
+using Inventory.Infrastructure.Helpers.Events;
 using Microsoft.Extensions.Logging;
 
 namespace Inventory.Application.Services;
@@ -12,12 +14,17 @@ public class ItemWriteService : IItemWriteService
     private readonly ILogger<ItemWriteService> _logger;
     private readonly ICommandDispatcher _commandDispatcher;
     private readonly IItemMapper _itemMapper;
+    private readonly IEventBus _eventBus;
 
-    public ItemWriteService(ILogger<ItemWriteService> logger, ICommandDispatcher commandDispatcher, IItemMapper itemMapper)
+    public ItemWriteService(ILogger<ItemWriteService> logger,
+        ICommandDispatcher commandDispatcher,
+        IItemMapper itemMapper,
+        IEventBus eventBus)
     {
         _logger = logger;
         _commandDispatcher = commandDispatcher;
         _itemMapper = itemMapper;
+        _eventBus = eventBus;
     }
 
     public Task AddItem(ItemDto item)
@@ -38,7 +45,7 @@ public class ItemWriteService : IItemWriteService
         }
     }
 
-    public Task RemoveItemByName(string name)
+    public async Task RemoveItemByName(string name)
     {
         try
         {
@@ -47,7 +54,11 @@ public class ItemWriteService : IItemWriteService
             {
                 Name = name
             };
-            return _commandDispatcher.DispatchAsync(command);
+            await _commandDispatcher.DispatchAsync(command);
+            _eventBus.Publish(new ItemRemovedEvent
+            {
+                Name = name
+            });
         }
         catch (Exception e)
         {

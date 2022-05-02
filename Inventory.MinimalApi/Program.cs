@@ -5,9 +5,11 @@ using Inventory.Application.Mappers.Items;
 using Inventory.Application.Services;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Commands;
+using Inventory.Infrastructure.Events;
 using Inventory.Infrastructure.Exceptions;
 using Inventory.Infrastructure.Helpers.Cqrs.Commands;
 using Inventory.Infrastructure.Helpers.Cqrs.Queries;
+using Inventory.Infrastructure.Helpers.Events;
 using Inventory.Infrastructure.Persistence;
 using Inventory.Infrastructure.Queries;
 using Inventory.Infrastructure.Repository;
@@ -18,6 +20,8 @@ var services = builder.Services;
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
+
+services.AddSingleton<IEventBus, EventBus>();
 
 services.AddSingleton<InventoryInMemoryContext>();
 services.AddTransient<IItemRepository, ItemInMemoryRepository>();
@@ -43,6 +47,18 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Subscribe to events
+using (var scope = app.Services.CreateScope())
+{
+    var eventBus = scope.ServiceProvider.GetRequiredService<IEventBus>();
+    eventBus.Subscribe<ItemRemovedEvent>(payload =>
+    {
+        var itemRemoved = payload.Event.Name;
+        Console.WriteLine("Item with name {0} has been removed at {1}", itemRemoved, payload.Timestamp);
+    });
+
+}
 
 app.MapGet("/items", async () =>
     {

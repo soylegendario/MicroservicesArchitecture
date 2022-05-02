@@ -7,6 +7,7 @@ using Inventory.Domain.Items;
 using Inventory.Infrastructure.Commands;
 using Inventory.Infrastructure.Exceptions;
 using Inventory.Infrastructure.Helpers.Cqrs.Commands;
+using Inventory.Infrastructure.Helpers.Events;
 using Inventory.Infrastructure.Persistence;
 using Inventory.Infrastructure.Repository;
 using Microsoft.Extensions.Logging;
@@ -37,7 +38,8 @@ public class ItemWriteServiceTests
                 itemRepository));
         
         _itemWriteService = new ItemWriteService(Mock.Of<ILogger<ItemWriteService>>(),
-            new CommandDispatcher(serviceProvider.Object), new ItemMapper(Mock.Of<ILogger<ItemMapper>>()));
+            new CommandDispatcher(serviceProvider.Object), new ItemMapper(Mock.Of<ILogger<ItemMapper>>()),
+            Mock.Of<IEventBus>());
     }
     
     [Test]
@@ -47,11 +49,8 @@ public class ItemWriteServiceTests
         _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(new List<Item>());
         var item = new ItemDto { Name = "Item 4"};
 
-        // Act
-        _itemWriteService.AddItem(item);
-
-        // Assert
-        Assert.NotNull(item.Id);
+        // Act&Assert
+        Assert.DoesNotThrowAsync(() => _itemWriteService.AddItem(item));
     }
 
     [Test]
@@ -65,7 +64,7 @@ public class ItemWriteServiceTests
         _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(expected);
         
         // Act&Assert
-        Assert.DoesNotThrow(() => _itemWriteService.RemoveItemByName("Item 1"));
+        Assert.DoesNotThrowAsync( () => _itemWriteService.RemoveItemByName("Item 1"));
     }
     
     [Test]
@@ -79,6 +78,6 @@ public class ItemWriteServiceTests
         _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(expected);
         
         // Act&Assert
-        Assert.Throws<ItemNotFoundException>(() => _itemWriteService.RemoveItemByName("Non-existent item"));
+        Assert.ThrowsAsync<ItemNotFoundException>(() => _itemWriteService.RemoveItemByName("Non-existent item"));
     }
 }
