@@ -63,7 +63,7 @@ using (var scope = app.Services.CreateScope())
     });
 }
 
-// Schedule a job to notify expired items
+// Schedule a job to notify expired items once a day
 var timer = new System.Timers.Timer(24 * 60 * 60 * 1000);
 timer.Elapsed += async (_, _) =>
 {
@@ -83,32 +83,26 @@ timer.Elapsed += async (_, _) =>
 timer.Enabled = true;
 timer.Start();
 
-app.MapGet("/items", async () =>
+app.MapGet("/items", async ([FromServices] IItemReadService itemReadService) =>
     {
         app.Logger.LogInformation("GET: /items");
-        using var scope = app.Services.CreateScope();
-        var itemReadService = scope.ServiceProvider.GetRequiredService<IItemReadService>();
         return await itemReadService.GetAllItems();
     })
     .WithName("GetItems");
 
-app.MapPost("/items", async ([FromBody] ItemDto item) =>
+app.MapPost("/items", async ([FromBody] ItemDto item, [FromServices] IItemWriteService itemWriteService) =>
     {
         app.Logger.LogInformation("POST: /items");
-        using var scope = app.Services.CreateScope();
-        var itemWriteService = scope.ServiceProvider.GetRequiredService<IItemWriteService>();
         await itemWriteService.AddItem(item);
         return Results.StatusCode((int)HttpStatusCode.Created);
     })
     .WithName("PostItem");
 
-app.MapDelete("/items/{name}", async (string name) =>
+app.MapDelete("/items/{name}", async (string name, [FromServices] IItemWriteService itemWriteService) =>
     {
-        app.Logger.LogInformation("DELETE: /items/{Name}", name);
-        using var scope = app.Services.CreateScope();
-        var itemWriteService = scope.ServiceProvider.GetRequiredService<IItemWriteService>();
         try
         {
+            app.Logger.LogInformation("DELETE: /items/{Name}", name);
             await itemWriteService.RemoveItemByName(name);
             return Results.Ok();
         }
