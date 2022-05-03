@@ -28,6 +28,7 @@ public class ItemReadService : IItemReadService
         _eventBus = eventBus;
     }
 
+    /// <inheritdoc />
     public async Task<IEnumerable<ItemDto>> GetAllItems()
     {
         try
@@ -44,6 +45,7 @@ public class ItemReadService : IItemReadService
         }
     }
 
+    /// <inheritdoc />
     public async Task<int> NotifyExpiredItems()
     {
         try

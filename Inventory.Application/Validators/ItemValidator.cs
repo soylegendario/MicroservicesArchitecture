@@ -3,6 +3,9 @@ using Inventory.Application.Dto;
 
 namespace Inventory.Application.Validators;
 
+/// <summary>
+/// Validator for <see cref="ItemDto"/>
+/// </summary>
 public class ItemValidator : AbstractValidator<ItemDto>
 {
     public ItemValidator()

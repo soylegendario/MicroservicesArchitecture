@@ -13,6 +13,7 @@ public class ItemMapper : IItemMapper
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public ItemDto Map(Item item)
     {
         _logger.LogInformation("Mapping item to dto");
@@ -25,12 +26,14 @@ public class ItemMapper : IItemMapper
         return itemDto;
     }
 
+    /// <inheritdoc />
     public IEnumerable<ItemDto> Map(IEnumerable<Item> items)
     {
         _logger.LogInformation("Mapping items to dto");
         return items.Select(Map).ToList();
     }
 
+    /// <inheritdoc />
     public Item Map(ItemDto itemDto)
     {
         _logger.LogInformation("Mapping dto to item");
