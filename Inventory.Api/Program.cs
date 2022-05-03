@@ -1,13 +1,10 @@
-using System.Net;
 using Inventory.Api.Authentication;
 using Inventory.Application.Contracts;
-using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
 using Inventory.Application.Services;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Commands;
 using Inventory.Infrastructure.Events;
-using Inventory.Infrastructure.Exceptions;
 using Inventory.Infrastructure.Helpers.Cqrs.Commands;
 using Inventory.Infrastructure.Helpers.Cqrs.Queries;
 using Inventory.Infrastructure.Helpers.Events;
@@ -15,14 +12,12 @@ using Inventory.Infrastructure.Persistence;
 using Inventory.Infrastructure.Queries;
 using Inventory.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Annotations;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
+services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(options =>
 {
@@ -81,6 +76,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -117,57 +113,5 @@ timer.Elapsed += async (_, _) =>
 };
 timer.Enabled = true;
 timer.Start();
-
-app.MapGet("/items", 
-        [Authorize]
-        [SwaggerOperation("Get all items")]
-        [SwaggerResponse(200, Description = "Operation success", Type = typeof(IEnumerable<ItemDto>))]
-        [SwaggerResponse(401, Description = "Unauthorized")]
-        [SwaggerResponse(500, Description = "Unexpected error")]
-        async ([FromServices] IItemReadService itemReadService) =>
-    {
-        app.Logger.LogInformation("GET: /items");
-        return await itemReadService.GetAllItems();
-    })
-    .WithName("GetItems");
-
-app.MapPost("/items", 
-        [Authorize] 
-        [SwaggerOperation("Create a new item")]
-        [SwaggerResponse(201, Description = "Created")]
-        [SwaggerResponse(400, Description = "Bad request")]
-        [SwaggerResponse(401, Description = "Unauthorized")]
-        [SwaggerResponse(500, Description = "Unexpected error")]
-        async ([FromBody] ItemDto item, [FromServices] IItemWriteService itemWriteService) =>
-    {
-        app.Logger.LogInformation("POST: /items");
-        await itemWriteService.AddItem(item);
-        return Results.StatusCode((int)HttpStatusCode.Created);
-    })
-    .WithName("PostItem");
-
-app.MapDelete("/items/{name}", 
-        [Authorize] 
-        [SwaggerOperation("Delete a item by name")]
-        [SwaggerResponse(200, Description = "Operation success")]
-        [SwaggerResponse(400, Description = "Bad request")]
-        [SwaggerResponse(401, Description = "Unauthorized")]
-        [SwaggerResponse(404, Description = "Not found")]
-        [SwaggerResponse(500, Description = "Unexpected error")]
-        async (string name, [FromServices] IItemWriteService itemWriteService) =>
-    {
-        try
-        {
-            app.Logger.LogInformation("DELETE: /items/{Name}", name);
-            await itemWriteService.RemoveItemByName(name);
-            return Results.Ok();
-        }
-        catch (ItemNotFoundException e)
-        {
-            app.Logger.LogError(e, "Item not found");
-            return Results.NotFound();
-        }
-    })
-    .WithName("DeleteItem");
 
 app.Run();
