@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FluentValidation;
 using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
 using Inventory.Application.Services;
@@ -48,11 +49,34 @@ public class ItemWriteServiceTests
     {
         // Arrange
         _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(new List<Item>());
-        var item = new ItemDto { Name = "Item 4"};
+        var item = new ItemDto { Name = "Item 4", ExpirationDate = DateTime.Now.AddDays(1)};
 
         // Act&Assert
         Assert.DoesNotThrowAsync(() => _itemWriteService.AddItem(item));
     }
+
+    [Test]
+    public void AddItem_GivenEmptyName_ThrowsValidationException()
+    {
+        // Arrange
+        _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(new List<Item>());
+        var item = new ItemDto { Name = "", ExpirationDate = DateTime.Now.AddDays(1)};
+
+        // Act&Assert
+        Assert.ThrowsAsync<ValidationException>(() => _itemWriteService.AddItem(item));
+    }
+    
+    [Test]
+    public void AddItem_GivenExpirationDateInThePast_ThrowsValidationException()
+    {
+        // Arrange
+        _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(new List<Item>());
+        var item = new ItemDto { Name = "", ExpirationDate = DateTime.Now.AddDays(-1)};
+
+        // Act&Assert
+        Assert.ThrowsAsync<ValidationException>(() => _itemWriteService.AddItem(item));
+    }
+    
 
     [Test]
     public void RemoveItemByName_RemovesItem()
