@@ -45,13 +45,16 @@ public class ItemsController : ControllerBase
     public async Task<IActionResult> Post([FromBody] ItemDto item)
     {
         _logger.LogInformation("POST: /items");
+        if(!ModelState.IsValid) { 
+            return BadRequest(ModelState);
+        }
         await _itemWriteService.AddItem(item);
         return StatusCode(StatusCodes.Status201Created);
     }
     
     [HttpDelete]
     [Authorize]
-    // [Route("/{name}")]
+    [Route("/{name}")]
     [SwaggerOperation("Delete a item by name")]
     [SwaggerResponse(200, Description = "Operation success")]
     [SwaggerResponse(400, Description = "Bad request")]

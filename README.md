@@ -21,6 +21,12 @@ Or with VisualStudio or Rider, set Inventory.MinimalApi as the startup project, 
 I'm used MinimalApi because it's the simplest solution, I never used it before but I'm sure it's a good start.
 Surely for a real project I would use classic WebApi implementation.
 
+## Authentication
+APIs uses Basic Authentication to authenticate you, you need to provide the next username and password:
+   - Username: admin
+   - Password: admin
+
+
 ## Patterns used
    - Dependency injection (DI) using .Net Core framework
    - Sub/Pub pattern for event-driven architecture
@@ -42,3 +48,4 @@ CQRS implementation is a POC made by me for fun and it can be found in https://g
    - Automapper: To map data between objects
    - RabbitMQ / Azure Queue: To send messages and distributed queue
    - Azure Functions: To schedule tasks (notify expired items)
+   - MediatR: To CQRS implementation (maybe yes, maybe not)

@@ -1,4 +1,6 @@
+using FluentValidation.AspNetCore;
 using Inventory.Api.Authentication;
+using Inventory.Api.Validators;
 using Inventory.Application.Contracts;
 using Inventory.Application.Mappers.Items;
 using Inventory.Application.Services;
@@ -17,7 +19,8 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
-services.AddControllers();
+services.AddControllers()
+    .AddFluentValidation(o => o.RegisterValidatorsFromAssemblyContaining<ItemValidator>());
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(options =>
 {
