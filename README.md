@@ -5,9 +5,18 @@
 Open a CLI, navigate to the root of the solution and type:
 
 ```
+dotnet run --project Inventory.Api
+```
+
+Or open VisualStudio or Rider, set Inventory.Api as the startup project, and run.
+
+I have also implemented a MinimalApi project that runs with:
+
+```
 dotnet run --project Inventory.MinimalApi
 ```
-Or open VisualStudio or Rider, set Inventory.MinimalApi as the startup project, and run.
+
+Or with VisualStudio or Rider, set Inventory.MinimalApi as the startup project, and run.
 
 I'm used MinimalApi because it's the simplest solution, I never used it before but I'm sure it's a good start.
 Surely for a real project I would use classic WebApi implementation.
