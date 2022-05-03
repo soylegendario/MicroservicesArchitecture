@@ -1,9 +1,10 @@
-using FluentValidation.AspNetCore;
+using FluentValidation;
 using Inventory.Api.Authentication;
-using Inventory.Api.Validators;
 using Inventory.Application.Contracts;
+using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
 using Inventory.Application.Services;
+using Inventory.Application.Validators;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Commands;
 using Inventory.Infrastructure.Events;
@@ -19,8 +20,7 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
-services.AddControllers()
-    .AddFluentValidation(o => o.RegisterValidatorsFromAssemblyContaining<ItemValidator>());
+services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(options =>
 {
@@ -64,6 +64,8 @@ services.AddTransient<IQueryHandler<GetAllItemsQuery, IEnumerable<Item>>, GetAll
 services.AddTransient<IQueryHandler<GetItemsByExpirationDateQuery, IEnumerable<Item>>, GetItemsByExpirationDateQueryHandler>();
 services.AddTransient<ICommandHandler<AddItemCommand>, AddItemCommandHandler>();
 services.AddTransient<ICommandHandler<RemoveItemByNameCommand>, RemoveItemByNameCommandHandler>();
+
+services.AddTransient<AbstractValidator<ItemDto>, ItemValidator>();
 
 services.AddScoped<IItemMapper, ItemMapper>();
 services.AddScoped<IItemReadService, ItemReadService>();

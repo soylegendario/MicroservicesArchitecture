@@ -1,7 +1,7 @@
 using FluentValidation;
 using Inventory.Application.Dto;
 
-namespace Inventory.Api.Validators;
+namespace Inventory.Application.Validators;
 
 public class ItemValidator : AbstractValidator<ItemDto>
 {

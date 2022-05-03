@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
 using Inventory.Application.Services;
+using Inventory.Application.Validators;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Commands;
 using Inventory.Infrastructure.Exceptions;
@@ -39,7 +40,7 @@ public class ItemWriteServiceTests
         
         _itemWriteService = new ItemWriteService(Mock.Of<ILogger<ItemWriteService>>(),
             new CommandDispatcher(serviceProvider.Object), new ItemMapper(Mock.Of<ILogger<ItemMapper>>()),
-            Mock.Of<IEventBus>());
+            Mock.Of<IEventBus>(), new ItemValidator());
     }
     
     [Test]

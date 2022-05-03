@@ -1,3 +1,4 @@
+using FluentValidation;
 using Inventory.Application.Contracts;
 using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
@@ -15,16 +16,19 @@ public class ItemWriteService : IItemWriteService
     private readonly ICommandDispatcher _commandDispatcher;
     private readonly IItemMapper _itemMapper;
     private readonly IEventBus _eventBus;
+    private readonly AbstractValidator<ItemDto> _validator;
 
     public ItemWriteService(ILogger<ItemWriteService> logger,
         ICommandDispatcher commandDispatcher,
         IItemMapper itemMapper,
-        IEventBus eventBus)
+        IEventBus eventBus,
+        AbstractValidator<ItemDto> validator)
     {
         _logger = logger;
         _commandDispatcher = commandDispatcher;
         _itemMapper = itemMapper;
         _eventBus = eventBus;
+        _validator = validator;
     }
 
     public Task AddItem(ItemDto item)
@@ -32,6 +36,11 @@ public class ItemWriteService : IItemWriteService
         try
         {
             _logger.LogInformation("Adding item");
+            var validationResult = _validator.Validate(item);
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
             var command = new AddItemCommand()
             {
                 Item = _itemMapper.Map(item)

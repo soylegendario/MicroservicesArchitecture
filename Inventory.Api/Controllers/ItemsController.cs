@@ -1,3 +1,4 @@
+using FluentValidation;
 using Inventory.Application.Contracts;
 using Inventory.Application.Dto;
 using Inventory.Infrastructure.Exceptions;
@@ -45,11 +46,16 @@ public class ItemsController : ControllerBase
     public async Task<IActionResult> Post([FromBody] ItemDto item)
     {
         _logger.LogInformation("POST: /items");
-        if(!ModelState.IsValid) { 
-            return BadRequest(ModelState);
+        try
+        {
+            await _itemWriteService.AddItem(item);
+            return StatusCode(StatusCodes.Status201Created);
         }
-        await _itemWriteService.AddItem(item);
-        return StatusCode(StatusCodes.Status201Created);
+        catch (ValidationException e)
+        {
+            _logger.LogError(e, "POST: /items, validation error");
+            return BadRequest(e.Message);
+        }
     }
     
     [HttpDelete]
