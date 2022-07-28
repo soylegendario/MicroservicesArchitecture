@@ -1,5 +1,5 @@
+using Inventory.CrossCutting.Cqrs.Commands;
 using Inventory.Domain.Items;
-using Inventory.Infrastructure.Helpers.Cqrs.Commands;
 using Microsoft.Extensions.Logging;
 
 namespace Inventory.Infrastructure.Commands;

@@ -1,4 +1,4 @@
-using Inventory.Infrastructure.Helpers.Cqrs.Commands;
+using Inventory.CrossCutting.Cqrs.Commands;
 
 namespace Inventory.Infrastructure.Commands;
 

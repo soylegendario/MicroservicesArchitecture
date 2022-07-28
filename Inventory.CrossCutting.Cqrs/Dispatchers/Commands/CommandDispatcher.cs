@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Inventory.Infrastructure.Helpers.Cqrs.Commands;
+namespace Inventory.CrossCutting.Cqrs.Commands;
 
 public class CommandDispatcher : ICommandDispatcher
 {

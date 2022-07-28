@@ -1,4 +1,4 @@
-﻿namespace Inventory.Infrastructure.Helpers.Cqrs.Commands;
+﻿namespace Inventory.CrossCutting.Cqrs.Commands;
 
 public interface ICommandDispatcher
 {

@@ -2,9 +2,9 @@ using FluentValidation;
 using Inventory.Application.Contracts;
 using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
+using Inventory.CrossCutting.Cqrs.Commands;
 using Inventory.Infrastructure.Commands;
 using Inventory.Infrastructure.Events;
-using Inventory.Infrastructure.Helpers.Cqrs.Commands;
 using Inventory.Infrastructure.Helpers.Events;
 using Microsoft.Extensions.Logging;
 

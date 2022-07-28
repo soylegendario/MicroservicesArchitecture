@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Inventory.Infrastructure.Helpers.Cqrs.Queries;
+namespace Inventory.CrossCutting.Cqrs.Queries;
 
 public class QueryDispatcher : IQueryDispatcher
 {

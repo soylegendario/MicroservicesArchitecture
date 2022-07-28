@@ -1,4 +1,4 @@
-﻿namespace Inventory.Infrastructure.Helpers.Cqrs.Queries;
+﻿namespace Inventory.CrossCutting.Cqrs.Queries;
 
 public interface IQueryDispatcher
 {

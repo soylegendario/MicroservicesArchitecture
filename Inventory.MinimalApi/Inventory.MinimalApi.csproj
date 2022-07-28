@@ -14,7 +14,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Inventory.Api.Authentication\Inventory.Api.Authentication.csproj" />
     <ProjectReference Include="..\Inventory.Application\Inventory.Application.csproj" />
-    <ProjectReference Include="..\Inventory.Infrastructure\Inventory.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
