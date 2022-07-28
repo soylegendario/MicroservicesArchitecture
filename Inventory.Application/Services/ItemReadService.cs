@@ -2,9 +2,9 @@ using Inventory.Application.Contracts;
 using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
 using Inventory.CrossCutting.Cqrs.Queries;
+using Inventory.CrossCutting.Events;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Events;
-using Inventory.Infrastructure.Helpers.Events;
 using Inventory.Infrastructure.Queries;
 using Microsoft.Extensions.Logging;
 

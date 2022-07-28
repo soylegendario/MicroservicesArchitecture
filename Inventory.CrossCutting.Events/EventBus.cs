@@ -1,4 +1,4 @@
-namespace Inventory.Infrastructure.Helpers.Events;
+namespace Inventory.CrossCutting.Events;
 
 public class EventBus : IEventBus
 {
