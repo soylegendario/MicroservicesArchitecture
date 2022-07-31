@@ -1,5 +1,5 @@
+using Inventory.CrossCutting.Exceptions;
 using Inventory.Domain.Items;
-using Inventory.Infrastructure.Exceptions;
 using Inventory.Infrastructure.Persistence;
 using Microsoft.Extensions.Logging;
 

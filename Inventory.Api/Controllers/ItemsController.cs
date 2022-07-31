@@ -1,7 +1,7 @@
 using FluentValidation;
 using Inventory.Application.Contracts;
 using Inventory.Application.Dto;
-using Inventory.Infrastructure.Exceptions;
+using Inventory.CrossCutting.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

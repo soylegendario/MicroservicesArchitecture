@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.CrossCutting.Cqrs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.CrossCutting.Events", "Inventory.CrossCutting.Events\Inventory.CrossCutting.Events.csproj", "{069F1C9A-676F-4192-8C0D-1FEAB6BED28B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.CrossCutting.Exceptions", "Inventory.CrossCutting.Exceptions\Inventory.CrossCutting.Exceptions.csproj", "{96892749-31E3-429B-AD33-698CC613EC42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{069F1C9A-676F-4192-8C0D-1FEAB6BED28B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{069F1C9A-676F-4192-8C0D-1FEAB6BED28B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{069F1C9A-676F-4192-8C0D-1FEAB6BED28B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96892749-31E3-429B-AD33-698CC613EC42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96892749-31E3-429B-AD33-698CC613EC42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96892749-31E3-429B-AD33-698CC613EC42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96892749-31E3-429B-AD33-698CC613EC42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9B209A91-650B-4885-B77D-D59575CD46A7} = {1B585F07-05A3-40AA-A32C-D2079ED02D77}

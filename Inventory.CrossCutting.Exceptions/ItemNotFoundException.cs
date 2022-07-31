@@ -1,9 +1,9 @@
 using System.Runtime.Serialization;
 
-namespace Inventory.Infrastructure.Exceptions;
+namespace Inventory.CrossCutting.Exceptions;
 
 [Serializable]
-public sealed class ItemNotFoundException : Exception    
+public sealed class ItemNotFoundException : ApplicationException    
 {
     public ItemNotFoundException()
     {
