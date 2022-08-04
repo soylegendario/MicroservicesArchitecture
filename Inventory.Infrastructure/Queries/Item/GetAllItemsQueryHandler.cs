@@ -18,15 +18,7 @@ public class GetAllItemsQueryHandler : IQueryHandler<GetAllItemsQuery, IEnumerab
 
     public Task<IEnumerable<Item>> HandleAsync(GetAllItemsQuery query, CancellationToken cancellation = default)
     {
-        try
-        {
-            _logger.LogInformation("GetAllItemsQueryHandler: Handling GetAllItemsQuery");
-            return Task.FromResult(_itemRepository.GetAllItems());
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "GetAllItemsQueryHandler: Error handling GetAllItemsQuery");
-            throw;
-        }
+        _logger.LogInformation("GetAllItemsQueryHandler: Handling GetAllItemsQuery");
+        return Task.FromResult(_itemRepository.GetAllItems());
     }
 }

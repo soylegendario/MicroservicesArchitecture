@@ -8,6 +8,7 @@ using Inventory.Application.Validators;
 using Inventory.CrossCutting.Cqrs.Commands;
 using Inventory.CrossCutting.Cqrs.Queries;
 using Inventory.CrossCutting.Events;
+using Inventory.CrossCutting.Exceptions;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Commands;
 using Inventory.Infrastructure.Events;
@@ -84,6 +85,7 @@ app.UseHttpsRedirection();
 app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<GlobalExceptionHandler>();
 
 // Subscribe to events
 using (var scope = app.Services.CreateScope())

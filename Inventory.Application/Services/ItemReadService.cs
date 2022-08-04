@@ -31,47 +31,30 @@ public class ItemReadService : IItemReadService
     /// <inheritdoc />
     public async Task<IEnumerable<ItemDto>> GetAllItems()
     {
-        try
-        {
-            _logger.LogInformation("Getting all items");
-            var items = await _queryDispatcher.DispatchAsync<GetAllItemsQuery, IEnumerable<Item>>(new GetAllItemsQuery());
-            return _itemMapper.Map(items);
-
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error getting all items");
-            throw;
-        }
+        _logger.LogInformation("Getting all items");
+        var items = await _queryDispatcher.DispatchAsync<GetAllItemsQuery, IEnumerable<Item>>(new GetAllItemsQuery());
+        return _itemMapper.Map(items);
     }
 
     /// <inheritdoc />
     public async Task<int> NotifyExpiredItems()
     {
-        try
+        _logger.LogInformation("Notifying expired items");
+        var query = new GetItemsByExpirationDateQuery
         {
-            _logger.LogInformation("Notifying expired items");
-            var query = new GetItemsByExpirationDateQuery
+            ExpirationDate = DateTime.UtcNow.AddDays(-1)
+        };
+        var expiredItems =
+            (await _queryDispatcher.DispatchAsync<GetItemsByExpirationDateQuery, IEnumerable<Item>>(query)).ToArray();
+        foreach (var item in expiredItems)
+        {
+            var eventData = new ItemExpiredEvent
             {
-                ExpirationDate = DateTime.UtcNow.AddDays(-1)
+                Name = item.Name,
+                ExpirationDate = item.ExpirationDate
             };
-            var expiredItems =
-                (await _queryDispatcher.DispatchAsync<GetItemsByExpirationDateQuery, IEnumerable<Item>>(query)).ToArray();
-            foreach (var item in expiredItems)
-            {
-                var eventData = new ItemExpiredEvent
-                {
-                    Name = item.Name,
-                    ExpirationDate = item.ExpirationDate
-                };
-                _eventBus.Publish(eventData);
-            }
-            return expiredItems.Length;
+            _eventBus.Publish(eventData);
         }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error notifying expired items");
-            throw;
-        }
+        return expiredItems.Length;
     }
 }

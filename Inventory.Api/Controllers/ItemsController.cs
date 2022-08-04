@@ -1,7 +1,5 @@
-using FluentValidation;
 using Inventory.Application.Contracts;
 using Inventory.Application.Dto;
-using Inventory.CrossCutting.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -46,16 +44,8 @@ public class ItemsController : ControllerBase
     public async Task<IActionResult> Post([FromBody] ItemDto item)
     {
         _logger.LogInformation("POST: /items");
-        try
-        {
-            await _itemWriteService.AddItem(item);
-            return StatusCode(StatusCodes.Status201Created);
-        }
-        catch (ValidationException e)
-        {
-            _logger.LogError(e, "POST: /items, validation error");
-            return BadRequest(e.Message);
-        }
+        await _itemWriteService.AddItem(item);
+        return StatusCode(StatusCodes.Status201Created);
     }
     
     [HttpDelete]
@@ -69,16 +59,8 @@ public class ItemsController : ControllerBase
     [SwaggerResponse(500, Description = "Unexpected error")]
     public async Task<IActionResult> Delete(string name)
     {
-        try
-        {
-            _logger.LogInformation("DELETE: /items");
-            await _itemWriteService.RemoveItemByName(name);
-            return Ok();
-        }
-        catch (ItemNotFoundException e)
-        {
-            _logger.LogError(e, "Item not found");
-            return NotFound();
-        }
+        _logger.LogInformation("DELETE: /items");
+        await _itemWriteService.RemoveItemByName(name);
+        return Ok();
     }
 }

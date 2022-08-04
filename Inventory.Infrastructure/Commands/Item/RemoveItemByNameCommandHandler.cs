@@ -17,16 +17,8 @@ public class RemoveItemByNameCommandHandler : ICommandHandler<RemoveItemByNameCo
 
     public Task HandleAsync(RemoveItemByNameCommand command, CancellationToken cancellation = default)
     {
-        try
-        {
-            _logger.LogInformation("Removing item by name: {Name}", command.Name);
-            _itemRepository.RemoveItemByName(command.Name);
-            return Task.CompletedTask;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error while removing item by name");
-            throw;
-        }
+        _logger.LogInformation("Removing item by name: {Name}", command.Name);
+        _itemRepository.RemoveItemByName(command.Name);
+        return Task.CompletedTask;
     }
 }

@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 namespace Inventory.CrossCutting.Exceptions;
 
 [Serializable]
-public sealed class ItemNotFoundException : ApplicationException    
+public sealed class ItemNotFoundException : NotFoundException    
 {
     public ItemNotFoundException()
     {

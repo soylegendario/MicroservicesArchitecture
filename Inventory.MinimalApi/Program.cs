@@ -87,6 +87,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<GlobalExceptionHandler>();
 
 // Subscribe to events
 using (var scope = app.Services.CreateScope())
@@ -144,17 +145,9 @@ app.MapPost("/items",
         [SwaggerResponse(500, Description = "Unexpected error")]
         async ([FromBody] ItemDto item, [FromServices] IItemWriteService itemWriteService) =>
     {
-        try
-        {
-            app.Logger.LogInformation("POST: /items");
-            await itemWriteService.AddItem(item);
-            return Results.StatusCode((int)HttpStatusCode.Created);
-        }
-        catch (ValidationException e)
-        {
-            app.Logger.LogError(e, "POST: /items, validation error");
-            return Results.BadRequest(e.Message);
-        }
+        app.Logger.LogInformation("POST: /items");
+        await itemWriteService.AddItem(item);
+        return Results.StatusCode((int)HttpStatusCode.Created);
     })
     .WithName("PostItem");
 
@@ -168,17 +161,9 @@ app.MapDelete("/items/{name}",
         [SwaggerResponse(500, Description = "Unexpected error")]
         async (string name, [FromServices] IItemWriteService itemWriteService) =>
     {
-        try
-        {
-            app.Logger.LogInformation("DELETE: /items/{Name}", name);
-            await itemWriteService.RemoveItemByName(name);
-            return Results.Ok();
-        }
-        catch (ItemNotFoundException e)
-        {
-            app.Logger.LogError(e, "Item not found");
-            return Results.NotFound();
-        }
+        app.Logger.LogInformation("DELETE: /items/{Name}", name);
+        await itemWriteService.RemoveItemByName(name);
+        return Results.Ok();
     })
     .WithName("DeleteItem");
 

@@ -34,47 +34,31 @@ public class ItemWriteService : IItemWriteService
     /// <inheritdoc />
     public Task AddItem(ItemDto item)
     {
-        try
+        _logger.LogInformation("Adding item");
+        var validationResult = _validator.Validate(item);
+        if (!validationResult.IsValid)
         {
-            _logger.LogInformation("Adding item");
-            var validationResult = _validator.Validate(item);
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.Errors);
-            }
-            var command = new AddItemCommand()
-            {
-                Item = _itemMapper.Map(item)
-            };
-            return _commandDispatcher.DispatchAsync(command);
+            throw new ValidationException(validationResult.Errors);
         }
-        catch (Exception e)
+        var command = new AddItemCommand()
         {
-            _logger.LogError(e, "Error adding item");
-            throw;
-        }
+            Item = _itemMapper.Map(item)
+        };
+        return _commandDispatcher.DispatchAsync(command);
     }
 
     /// <inheritdoc />
     public async Task RemoveItemByName(string name)
     {
-        try
+        _logger.LogInformation("Removing item by name");
+        var command = new RemoveItemByNameCommand
         {
-            _logger.LogInformation("Removing item by name");
-            var command = new RemoveItemByNameCommand
-            {
-                Name = name
-            };
-            await _commandDispatcher.DispatchAsync(command);
-            _eventBus.Publish(new ItemRemovedEvent
-            {
-                Name = name
-            });
-        }
-        catch (Exception e)
+            Name = name
+        };
+        await _commandDispatcher.DispatchAsync(command);
+        _eventBus.Publish(new ItemRemovedEvent
         {
-            _logger.LogError(e, "Error removing item by name");
-            throw;
-        }
+            Name = name
+        });
     }
 }

@@ -17,16 +17,8 @@ public class GetItemsByExpirationDateQueryHandler : IQueryHandler<GetItemsByExpi
 
     public Task<IEnumerable<Item>> HandleAsync(GetItemsByExpirationDateQuery query, CancellationToken cancellation = default)
     {
-        try
-        {
-            _logger.LogInformation("GetItemsByExpirationDateQueryHandler: Handling GetItemsByExpirationDateQuery");
-            var items = _itemRepository.GetItemsByExpirationDate(query.ExpirationDate);
-            return Task.FromResult(items);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "GetItemsByExpirationDateQueryHandler: Error handling GetItemsByExpirationDateQuery");
-            throw;
-        }
+        _logger.LogInformation("GetItemsByExpirationDateQueryHandler: Handling GetItemsByExpirationDateQuery");
+        var items = _itemRepository.GetItemsByExpirationDate(query.ExpirationDate);
+        return Task.FromResult(items);
     }
 }
