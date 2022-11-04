@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Inventory.Api.Authentication\Inventory.Api.Authentication.csproj" />
+    <ProjectReference Include="..\Inventory.Api.HostedServices\Inventory.Api.HostedServices.csproj" />
     <ProjectReference Include="..\Inventory.Application\Inventory.Application.csproj" />
   </ItemGroup>
 

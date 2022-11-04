@@ -1,6 +1,7 @@
 using System.Net;
 using FluentValidation;
 using Inventory.Api.Authentication;
+using Inventory.Api.HostedServices;
 using Inventory.Application.Contracts;
 using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
@@ -87,6 +88,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+services.AddHostedService<ExpiredItemsNotificatorHostedService>();
 app.UseMiddleware<GlobalExceptionHandler>();
 
 // Subscribe to events
@@ -102,26 +104,6 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine("Item with name {0} has expired at {1}", payload.Event.Name, payload.Event.ExpirationDate);
     });
 }
-
-// Schedule a job to notify expired items once a day
-var timer = new System.Timers.Timer(24 * 60 * 60 * 1000);
-timer.Elapsed += async (_, _) =>
-{
-    try
-    {
-        app.Logger.LogInformation("Executing scheduled job to notify expired items");
-        using var scope = app.Services.CreateScope();
-        var itemReadService = scope.ServiceProvider.GetRequiredService<IItemReadService>();
-        var itemsNotified = await itemReadService.NotifyExpiredItems();
-        app.Logger.LogInformation("{ItemsNotified} items have been notified", itemsNotified);
-    }
-    catch (Exception e)
-    {
-        app.Logger.LogError(e, "Error while executing scheduled job to notify expired items");
-    }
-};
-timer.Enabled = true;
-timer.Start();
 
 app.MapGet("/items", 
         [Authorize]

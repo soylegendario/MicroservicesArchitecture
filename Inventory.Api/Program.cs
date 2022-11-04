@@ -1,5 +1,6 @@
 using FluentValidation;
 using Inventory.Api.Authentication;
+using Inventory.Api.HostedServices;
 using Inventory.Application.Contracts;
 using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
@@ -52,6 +53,7 @@ services.AddSwaggerGen(options =>
 services.AddAuthentication("BasicAuthentication")
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 services.AddAuthorization();
+services.AddHostedService<ExpiredItemsNotificatorHostedService>();
 
 services.AddSingleton<IEventBus, EventBus>();
 
@@ -68,9 +70,9 @@ services.AddTransient<ICommandHandler<RemoveItemByNameCommand>, RemoveItemByName
 
 services.AddTransient<AbstractValidator<ItemDto>, ItemValidator>();
 
-services.AddScoped<IItemMapper, ItemMapper>();
-services.AddScoped<IItemReadService, ItemReadService>();
-services.AddScoped<IItemWriteService, ItemWriteService>();
+services.AddTransient<IItemMapper, ItemMapper>();
+services.AddTransient<IItemReadService, ItemReadService>();
+services.AddTransient<IItemWriteService, ItemWriteService>();
 
 var app = builder.Build();
 
@@ -100,25 +102,5 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine("Item with name {0} has expired at {1}", payload.Event.Name, payload.Event.ExpirationDate);
     });
 }
-
-// Schedule a job to notify expired items once a day
-var timer = new System.Timers.Timer(24 * 60 * 60 * 1000);
-timer.Elapsed += async (_, _) =>
-{
-    try
-    {
-        app.Logger.LogInformation("Executing scheduled job to notify expired items");
-        using var scope = app.Services.CreateScope();
-        var itemReadService = scope.ServiceProvider.GetRequiredService<IItemReadService>();
-        var itemsNotified = await itemReadService.NotifyExpiredItems();
-        app.Logger.LogInformation("{ItemsNotified} items have been notified", itemsNotified);
-    }
-    catch (Exception e)
-    {
-        app.Logger.LogError(e, "Error while executing scheduled job to notify expired items");
-    }
-};
-timer.Enabled = true;
-timer.Start();
 
 app.Run();
