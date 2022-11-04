@@ -56,6 +56,7 @@ services.AddSwaggerGen(options =>
 services.AddAuthentication("BasicAuthentication")
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 services.AddAuthorization();
+services.AddHostedService<ExpiredItemsNotificatorHostedService>();
 
 services.AddSingleton<IEventBus, EventBus>();
 
@@ -72,9 +73,9 @@ services.AddTransient<ICommandHandler<RemoveItemByNameCommand>, RemoveItemByName
 
 services.AddTransient<AbstractValidator<ItemDto>, ItemValidator>();
 
-services.AddScoped<IItemMapper, ItemMapper>();
-services.AddScoped<IItemReadService, ItemReadService>();
-services.AddScoped<IItemWriteService, ItemWriteService>();
+services.AddTransient<IItemMapper, ItemMapper>();
+services.AddTransient<IItemReadService, ItemReadService>();
+services.AddTransient<IItemWriteService, ItemWriteService>();
 
 var app = builder.Build();
 
@@ -88,7 +89,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-services.AddHostedService<ExpiredItemsNotificatorHostedService>();
 app.UseMiddleware<GlobalExceptionHandler>();
 
 // Subscribe to events
