@@ -8,7 +8,7 @@ namespace Inventory.Api;
 
 public static class Startup
 {
-    public static IServiceCollection ConfigureApiServices(this IServiceCollection services)
+    public static IServiceCollection AddApiServices(this IServiceCollection services)
     {
         services.AddControllers();
         services.AddEndpointsApiExplorer();

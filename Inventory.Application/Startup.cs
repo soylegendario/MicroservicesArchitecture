@@ -10,7 +10,7 @@ namespace Inventory.Application;
 
 public static class Startup
 {
-    public static IServiceCollection ConfigureApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddTransient<AbstractValidator<ItemDto>, ItemValidator>();
         services.AddTransient<IItemMapper, ItemMapper>();
