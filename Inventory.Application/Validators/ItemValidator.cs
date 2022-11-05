@@ -6,7 +6,7 @@ namespace Inventory.Application.Validators;
 /// <summary>
 /// Validator for <see cref="ItemDto"/>
 /// </summary>
-public class ItemValidator : AbstractValidator<ItemDto>
+internal class ItemValidator : AbstractValidator<ItemDto>
 {
     public ItemValidator()
     {

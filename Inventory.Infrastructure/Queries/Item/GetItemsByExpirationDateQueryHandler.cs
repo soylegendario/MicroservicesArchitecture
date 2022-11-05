@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Infrastructure.Queries;
 
-public class GetItemsByExpirationDateQueryHandler : IQueryHandler<GetItemsByExpirationDateQuery, IEnumerable<Item>>
+internal class GetItemsByExpirationDateQueryHandler : IQueryHandler<GetItemsByExpirationDateQuery, IEnumerable<Item>>
 {
     private readonly ILogger<GetItemsByExpirationDateQueryHandler> _logger;
     private readonly IItemRepository _itemRepository;
