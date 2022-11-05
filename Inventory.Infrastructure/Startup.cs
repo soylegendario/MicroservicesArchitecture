@@ -11,7 +11,7 @@ namespace Inventory.Infrastructure;
 
 public static class Startup
 {
-    public static IServiceCollection ConfigureInfrastructureServices(this IServiceCollection services)
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
         services.AddSingleton<IQueryDispatcher, QueryDispatcher>();
         services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
