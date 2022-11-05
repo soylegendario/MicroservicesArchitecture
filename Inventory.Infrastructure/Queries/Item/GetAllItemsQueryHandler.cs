@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Infrastructure.Queries;
 
-public class GetAllItemsQueryHandler : IQueryHandler<GetAllItemsQuery, IEnumerable<Item>>
+internal class GetAllItemsQueryHandler : IQueryHandler<GetAllItemsQuery, IEnumerable<Item>>
 {
     private readonly ILogger<GetAllItemsQueryHandler> _logger;
     private readonly IItemRepository _itemRepository;

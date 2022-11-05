@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Infrastructure.Repository;
 
-public class ItemInMemoryRepository : IItemRepository
+internal class ItemInMemoryRepository : IItemRepository
 {
     private readonly ILogger<ItemInMemoryRepository> _logger;
     private readonly InventoryInMemoryContext _context;

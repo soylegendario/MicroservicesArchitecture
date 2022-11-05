@@ -4,9 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Application.Mappers.Items;
 
-public class ItemMapper : IItemMapper
+internal class ItemMapper : IItemMapper
 {
-    public readonly ILogger<ItemMapper> _logger;
+    private readonly ILogger<ItemMapper> _logger;
 
     public ItemMapper(ILogger<ItemMapper> logger)
     {

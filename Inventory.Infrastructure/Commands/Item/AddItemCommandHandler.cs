@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Infrastructure.Commands;
 
-public class AddItemCommandHandler : ICommandHandler<AddItemCommand>
+internal class AddItemCommandHandler : ICommandHandler<AddItemCommand>
 {
     private readonly ILogger<AddItemCommandHandler> _logger;
     private readonly IItemRepository _itemRepository;

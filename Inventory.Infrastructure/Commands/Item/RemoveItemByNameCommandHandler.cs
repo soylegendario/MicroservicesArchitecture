@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Infrastructure.Commands;
 
-public class RemoveItemByNameCommandHandler : ICommandHandler<RemoveItemByNameCommand>
+internal class RemoveItemByNameCommandHandler : ICommandHandler<RemoveItemByNameCommand>
 {
     private readonly ILogger<RemoveItemByNameCommandHandler> _logger;
     private readonly IItemRepository _itemRepository;

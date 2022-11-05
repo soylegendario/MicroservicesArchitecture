@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Application.Services;
 
-public class ItemWriteService : IItemWriteService
+internal class ItemWriteService : IItemWriteService
 {
     private readonly ILogger<ItemWriteService> _logger;
     private readonly ICommandDispatcher _commandDispatcher;
