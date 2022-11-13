@@ -17,7 +17,7 @@ namespace Inventory.UnitTests;
 public class ItemWriteServiceTests
 {
     [Theory]
-    [AutoData]
+    [AutoMoqData]
     internal async Task AddItem_AddsItem(
         ItemDto item,
         [Frozen] Mock<InventoryInMemoryContext> context,
@@ -34,7 +34,7 @@ public class ItemWriteServiceTests
     }
 
     [Theory]
-    [AutoData]
+    [AutoMoqData]
     internal void AddItem_GivenEmptyName_ThrowsValidationException(
         ItemDto item,
         [Frozen] Mock<InventoryInMemoryContext> context,
@@ -52,7 +52,7 @@ public class ItemWriteServiceTests
     }
     
     [Theory]
-    [AutoData]
+    [AutoMoqData]
     internal async Task AddItem_GivenExpirationDateInThePast_ThrowsValidationException(
         ItemDto item,
         [Frozen] Mock<InventoryInMemoryContext> context,
@@ -71,7 +71,7 @@ public class ItemWriteServiceTests
     
 
     [Theory]
-    [AutoData]
+    [AutoMoqData]
     internal async Task RemoveItemByName_RemovesItem(
         List<Item> items,
         [Frozen] Mock<InventoryInMemoryContext> context,
@@ -88,7 +88,7 @@ public class ItemWriteServiceTests
     }
     
     [Theory]
-    [AutoData]
+    [AutoMoqData]
     internal void RemoveItemByName_ThrowsException_WhenItemNotFound(
         List<Item> items,
         [Frozen] Mock<InventoryInMemoryContext> context,

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
 using AutoFixture.Xunit2;
@@ -18,7 +19,7 @@ public class ItemRepositoryTests
     private readonly Item _item = new Fixture().Create<Item>();
     
     [Theory]
-    [AutoData]
+    [AutoMoqData]
     internal void CanAddItem(ItemInMemoryRepository sut)
     {
         // Act
@@ -30,7 +31,7 @@ public class ItemRepositoryTests
     }
 
     [Theory]
-    [AutoData]
+    [AutoMoqData]
     internal void CanGetAllItems(ItemInMemoryRepository sut)
     {
         // Arrange
@@ -44,7 +45,7 @@ public class ItemRepositoryTests
     }
 
     [Theory]
-    [AutoData]
+    [AutoMoqData]
     internal void GetItemsByExpirationDate_ReturnsItemsWithGivenExpirationDate(ItemInMemoryRepository sut)
     {
         // Arrange
@@ -62,14 +63,15 @@ public class ItemRepositoryTests
     }
     
     [Theory]
-    [AutoData]
-    internal void CanRemoveItem(ItemInMemoryRepository sut)
+    [AutoMoqData]
+    internal void CanRemoveItem(
+        ItemInMemoryRepository sut)
     {
         // Arrange
         sut.AddItem(_item);
         
         // Act
-        sut.RemoveItemByName("Test Item");
+        sut.RemoveItemByName(_item.Name);
     
         // Assert
         var items = sut.GetAllItems();
@@ -77,7 +79,7 @@ public class ItemRepositoryTests
     }
     
     [Theory]
-    [AutoData]
+    [AutoMoqData]
     internal void TryRemoveItemByName_WhenItemDoesNotExist_ThrowsItemNotFoundException(ItemInMemoryRepository sut)
     {
         Assert.Throws<ItemNotFoundException>(() => sut.RemoveItemByName("Non-existent Item"));

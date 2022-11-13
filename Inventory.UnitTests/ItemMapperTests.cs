@@ -1,3 +1,5 @@
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using AutoFixture.Xunit2;
 using FluentAssertions;
 using Inventory.Application.Mappers.Items;
@@ -8,8 +10,12 @@ namespace Inventory.UnitTests;
 
 public class ItemMapperTests
 {
+    public ItemMapperTests()
+    {
+    }
+    
     [Theory]
-    [AutoData]
+    [AutoMoqData]
     internal void ShouldMapItem(Item item, ItemMapper sut)
     {
         var itemDto = sut.Map(item);
@@ -21,7 +27,7 @@ public class ItemMapperTests
     }
 
     [Theory]
-    [AutoData]
+    [AutoMoqData]
     internal void ShouldMapItems(Item[] items, ItemMapper sut)
     {
         var itemsDto = sut.Map(items);

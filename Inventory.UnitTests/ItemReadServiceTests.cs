@@ -14,7 +14,7 @@ namespace Inventory.UnitTests;
 public class ItemReadServiceTests
 {
     [Theory]
-    [AutoData]
+    [AutoMoqData]
     internal async Task GetAllItems_ReturnsAllItems(
         List<Item> expected,
         [Frozen] Mock<InventoryInMemoryContext> context,
@@ -31,7 +31,7 @@ public class ItemReadServiceTests
     }
     
     [Theory]
-    [AutoData]
+    [AutoMoqData]
     internal async Task NotifyExpiredItems_ReturnsAllExpiredItems(
         [Frozen] Mock<InventoryInMemoryContext> context,
         ItemReadService sut)
