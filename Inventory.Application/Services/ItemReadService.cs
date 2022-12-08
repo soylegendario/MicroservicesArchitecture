@@ -35,7 +35,8 @@ internal class ItemReadService : IItemReadService
     public async Task<IEnumerable<ItemDto>> GetAllItems()
     {
         _logger.LogInformation("Getting all items");
-        var items = await _queryDispatcher.DispatchAsync<GetAllItemsQuery, IEnumerable<Item>>(new GetAllItemsQuery());
+        var items = await _queryDispatcher
+            .DispatchAsync<GetAllItemsQuery, IEnumerable<Item>>(new GetAllItemsQuery());
         return _itemMapper.Map(items);
     }
 

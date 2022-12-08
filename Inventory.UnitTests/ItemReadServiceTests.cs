@@ -1,11 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using FluentAssertions;
+using Inventory.Application.Dto;
+using Inventory.Application.Mappers.Items;
 using Inventory.Application.Services;
+using Inventory.CrossCutting.Cqrs.Queries;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Persistence;
+using Inventory.Infrastructure.Queries;
 using Moq;
 using Xunit;
 
@@ -16,12 +21,12 @@ public class ItemReadServiceTests
     [Theory]
     [AutoMoqData]
     internal async Task GetAllItems_ReturnsAllItems(
-        List<Item> expected,
-        [Frozen] Mock<InventoryInMemoryContext> context,
+        List<ItemDto> expected,
+        [Frozen] Mock<IItemMapper> mapper,
         ItemReadService sut)
     {
         // Arrange
-        context.Setup(i => i.Items).Returns(expected);
+        mapper.Setup(mock => mock.Map(It.IsAny<IEnumerable<Item>>())).Returns(expected);
 
         // Act
         var actual = await sut.GetAllItems();
@@ -33,20 +38,19 @@ public class ItemReadServiceTests
     [Theory]
     [AutoMoqData]
     internal async Task NotifyExpiredItems_ReturnsAllExpiredItems(
-        [Frozen] Mock<InventoryInMemoryContext> context,
+        [Frozen] Mock<IQueryDispatcher> queryDispatcher,
         ItemReadService sut)
     {
         // Arrange
         var expected = new List<Item>
         {
-            new() { Id = Guid.NewGuid(), Name = "Item 1", ExpirationDate = DateTime.Now.AddDays(-1)},
-            new() { Id = Guid.NewGuid(), Name = "Item 2", ExpirationDate = DateTime.Now.AddDays(-2)},
-            new() { Id = Guid.NewGuid(), Name = "Item 3", ExpirationDate = DateTime.Now.AddDays(-3)},
-            new() { Id = Guid.NewGuid(), Name = "Item 4", ExpirationDate = DateTime.Now.AddDays(1)},
-            new() { Id = Guid.NewGuid(), Name = "Item 5", ExpirationDate = DateTime.Now.AddDays(2)},
-            new() { Id = Guid.NewGuid(), Name = "Item 6", ExpirationDate = DateTime.Now.AddDays(3)}
+            new() { Id = Guid.NewGuid(), Name = "Item 1", ExpirationDate = DateTime.Now.AddDays(-1)}
         };
-        context.Setup(i => i.Items).Returns(expected);
+        queryDispatcher.Setup(mock =>
+                mock.DispatchAsync<GetItemsByExpirationDateQuery, IEnumerable<Item>>(
+                    It.IsAny<GetItemsByExpirationDateQuery>(), 
+                    It.IsAny<CancellationToken>()))
+            .ReturnsAsync(expected);
 
         // Act
         var expiredItems = await sut.NotifyExpiredItems();

@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using FluentAssertions;
 using FluentValidation;
+using FluentValidation.Results;
 using Inventory.Application.Dto;
 using Inventory.Application.Services;
+using Inventory.CrossCutting.Cqrs.Commands;
 using Inventory.CrossCutting.Exceptions;
 using Inventory.Domain.Items;
+using Inventory.Infrastructure.Commands;
 using Inventory.Infrastructure.Persistence;
 using Moq;
 using Xunit;
@@ -20,11 +24,9 @@ public class ItemWriteServiceTests
     [AutoMoqData]
     internal async Task AddItem_AddsItem(
         ItemDto item,
-        [Frozen] Mock<InventoryInMemoryContext> context,
         ItemWriteService sut)
     {
         // Arrange
-        context.Setup(i => i.Items).Returns(new List<Item>());
 
         // Act
         var exception = await Record.ExceptionAsync(() => sut.AddItem(item));
@@ -37,11 +39,10 @@ public class ItemWriteServiceTests
     [AutoMoqData]
     internal void AddItem_GivenEmptyName_ThrowsValidationException(
         ItemDto item,
-        [Frozen] Mock<InventoryInMemoryContext> context,
+        [Frozen] Mock<IValidator<ItemDto>> validator,
         ItemWriteService sut)
     {
         // Arrange
-        context.Setup(i => i.Items).Returns(new List<Item>());
         item.Name = "";
         
         // Act
@@ -65,7 +66,7 @@ public class ItemWriteServiceTests
         // Act
         var exception = await Record.ExceptionAsync(() => sut.AddItem(item));
         
-        // Act&Assert
+        // Assert
         exception.Should().BeOfType<ValidationException>();
     }
     
@@ -74,11 +75,9 @@ public class ItemWriteServiceTests
     [AutoMoqData]
     internal async Task RemoveItemByName_RemovesItem(
         List<Item> items,
-        [Frozen] Mock<InventoryInMemoryContext> context,
         ItemWriteService sut)
     {
         // Arrange
-        context.Setup(i => i.Items).Returns(items);
         
         // Assert
         var exception = await Record.ExceptionAsync(() => sut.RemoveItemByName(items[0].Name));
@@ -89,16 +88,17 @@ public class ItemWriteServiceTests
     
     [Theory]
     [AutoMoqData]
-    internal void RemoveItemByName_ThrowsException_WhenItemNotFound(
-        List<Item> items,
-        [Frozen] Mock<InventoryInMemoryContext> context,
+    internal async Task RemoveItemByName_ThrowsException_WhenItemNotFound(
+        [Frozen] Mock<ICommandDispatcher> commandDispatcher,
         ItemWriteService sut)
     {
         // Arrange
-        context.Setup(i => i.Items).Returns(items);
+        commandDispatcher.Setup(mock =>
+                mock.DispatchAsync(It.IsAny<RemoveItemByNameCommand>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new ItemNotFoundException());
         
         // Act 
-        var exception = Record.ExceptionAsync(() => sut.RemoveItemByName("Non-existent item"));
+        var exception = await Record.ExceptionAsync(() => sut.RemoveItemByName("Non-existent item"));
         
         // Assert
         exception.Should().BeOfType<ItemNotFoundException>();
