@@ -1,62 +1,37 @@
-using System;
-using System.Linq;
+using AutoFixture;
+using AutoFixture.AutoMoq;
+using AutoFixture.Xunit2;
+using FluentAssertions;
 using Inventory.Application.Mappers.Items;
 using Inventory.Domain.Items;
-using Microsoft.Extensions.Logging;
-using Moq;
-using NUnit.Framework;
+using Xunit;
 
 namespace Inventory.UnitTests;
 
-[TestFixture]
 public class ItemMapperTests
 {
-    private ItemMapper _itemMapperTests = null!;
-
-    [SetUp]
-    public void SetUp()
+    public ItemMapperTests()
     {
-        _itemMapperTests = new ItemMapper(Mock.Of<ILogger<ItemMapper>>());
+    }
+    
+    [Theory]
+    [AutoMoqData]
+    internal void ShouldMapItem(Item item, ItemMapper sut)
+    {
+        var itemDto = sut.Map(item);
+
+        Assert.Equal(item.Id, itemDto.Id);
+        Assert.Equal(item.Id, itemDto.Id);
+        Assert.Equal(item.Name, itemDto.Name);
+        Assert.Equal(item.ExpirationDate, itemDto.ExpirationDate);
     }
 
-    [Test]
-    public void ShouldMapItem()
+    [Theory]
+    [AutoMoqData]
+    internal void ShouldMapItems(Item[] items, ItemMapper sut)
     {
-        var item = new Item
-        {
-            Id = Guid.NewGuid(),
-            Name = "Item 1",
-            ExpirationDate = DateTime.UtcNow
-        };
+        var itemsDto = sut.Map(items);
 
-        var itemDto = _itemMapperTests.Map(item);
-
-        Assert.That(itemDto.Id, Is.EqualTo(item.Id));
-        Assert.That(itemDto.Name, Is.EqualTo(item.Name));
-        Assert.That(itemDto.ExpirationDate, Is.EqualTo(item.ExpirationDate));
-    }
-
-    [Test]
-    public void ShouldMapItems()
-    {
-        var items = new[]
-        {
-            new Item
-            {
-                Id = Guid.NewGuid(),
-                Name = "Item 1",
-                ExpirationDate = DateTime.UtcNow
-            },
-            new Item
-            {
-                Id = Guid.NewGuid(),
-                Name = "Item 2",
-                ExpirationDate = DateTime.UtcNow
-            }
-        };
-        
-        var itemsDto = _itemMapperTests.Map(items);
-        
-        Assert.That(itemsDto.Count(), Is.EqualTo(items.Length));
+        itemsDto.Should().BeEquivalentTo(items);
     }
 }

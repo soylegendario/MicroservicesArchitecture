@@ -1,108 +1,93 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using AutoFixture.Xunit2;
+using FluentAssertions;
 using FluentValidation;
+using FluentValidation.Results;
 using Inventory.Application.Dto;
-using Inventory.Application.Mappers.Items;
 using Inventory.Application.Services;
-using Inventory.Application.Validators;
 using Inventory.CrossCutting.Cqrs.Commands;
-using Inventory.CrossCutting.Events;
 using Inventory.CrossCutting.Exceptions;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Commands;
 using Inventory.Infrastructure.Persistence;
-using Inventory.Infrastructure.Repository;
-using Microsoft.Extensions.Logging;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 
 namespace Inventory.UnitTests;
 
-[TestFixture]
 public class ItemWriteServiceTests
 {
-    private Mock<InventoryInMemoryContext> _inventoryInMemoryContextMock = null!;
-    private ItemWriteService _itemWriteService = null!;
-
-    [SetUp]
-    public void SetUp()
+    [Theory]
+    [AutoMoqData]
+    internal async Task AddItem_AddsItem(
+        ItemDto item,
+        ItemWriteService sut)
     {
-        _inventoryInMemoryContextMock = new Mock<InventoryInMemoryContext>();
-        var itemRepository = new ItemInMemoryRepository(Mock.Of<ILogger<ItemInMemoryRepository>>(),
-            _inventoryInMemoryContextMock.Object);
+        // Arrange
 
-        var serviceProvider = new Mock<IServiceProvider>();
-        serviceProvider.Setup(x => x.GetService(typeof(ICommandHandler<AddItemCommand>)))
-            .Returns(new AddItemCommandHandler(Mock.Of<ILogger<AddItemCommandHandler>>(),
-                itemRepository));
-        serviceProvider.Setup(x => x.GetService(typeof(ICommandHandler<RemoveItemByNameCommand>)))
-            .Returns(new RemoveItemByNameCommandHandler(Mock.Of<ILogger<RemoveItemByNameCommandHandler>>(),
-                itemRepository));
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.AddItem(item));
         
-        _itemWriteService = new ItemWriteService(Mock.Of<ILogger<ItemWriteService>>(),
-            new CommandDispatcher(serviceProvider.Object), new ItemMapper(Mock.Of<ILogger<ItemMapper>>()),
-            Mock.Of<IEventBus>(), new ItemValidator());
-    }
-    
-    [Test]
-    public void AddItem_AddsItem()
-    {
-        // Arrange
-        _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(new List<Item>());
-        var item = new ItemDto { Name = "Item 4", ExpirationDate = DateTime.Now.AddDays(1)};
-
-        // Act&Assert
-        Assert.DoesNotThrowAsync(() => _itemWriteService.AddItem(item));
+        // Assert
+        Assert.Null(exception);
     }
 
-    [Test]
-    public void AddItem_GivenEmptyName_ThrowsValidationException()
+    [Theory]
+    [AutoMoqData]
+    internal async Task GivenANotValidItem_WhenAddItemIsCalled_ShouldThrowsValidationException(
+        ItemDto item,
+        [Frozen] Mock<IValidator<ItemDto>> validator,
+        ItemWriteService sut)
     {
         // Arrange
-        _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(new List<Item>());
-        var item = new ItemDto { Name = "", ExpirationDate = DateTime.Now.AddDays(1)};
-
-        // Act&Assert
-        Assert.ThrowsAsync<ValidationException>(() => _itemWriteService.AddItem(item));
-    }
-    
-    [Test]
-    public void AddItem_GivenExpirationDateInThePast_ThrowsValidationException()
-    {
-        // Arrange
-        _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(new List<Item>());
-        var item = new ItemDto { Name = "", ExpirationDate = DateTime.Now.AddDays(-1)};
-
-        // Act&Assert
-        Assert.ThrowsAsync<ValidationException>(() => _itemWriteService.AddItem(item));
-    }
-    
-
-    [Test]
-    public void RemoveItemByName_RemovesItem()
-    {
-        // Arrange
-        var expected = new List<Item>
-        {
-            new() { Id = Guid.NewGuid(), Name = "Item 1"}
-        };
-        _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(expected);
+        item.Name = "";
+        validator.Setup(mock =>
+                mock.Validate(item))
+            .Returns(new ValidationResult(new[]
+            {
+                new ValidationFailure("", "")
+            }));
         
-        // Act&Assert
-        Assert.DoesNotThrowAsync( () => _itemWriteService.RemoveItemByName("Item 1"));
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.AddItem(item));
+
+        // Assert
+        exception.Should().BeOfType<ValidationException>();
     }
     
-    [Test]
-    public void RemoveItemByName_ThrowsException_WhenItemNotFound()
+    [Theory]
+    [AutoMoqData]
+    internal async Task RemoveItemByName_RemovesItem(
+        List<Item> items,
+        ItemWriteService sut)
     {
         // Arrange
-        var expected = new List<Item>
-        {
-            new() { Id = Guid.NewGuid(), Name = "Item 1"}
-        };
-        _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(expected);
         
-        // Act&Assert
-        Assert.ThrowsAsync<ItemNotFoundException>(() => _itemWriteService.RemoveItemByName("Non-existent item"));
+        // Assert
+        var exception = await Record.ExceptionAsync(() => sut.RemoveItemByName(items[0].Name));
+        
+        // Assert
+        Assert.Null(exception);
+    }
+    
+    [Theory]
+    [AutoMoqData]
+    internal async Task RemoveItemByName_ThrowsException_WhenItemNotFound(
+        [Frozen] Mock<ICommandDispatcher> commandDispatcher,
+        ItemWriteService sut)
+    {
+        // Arrange
+        commandDispatcher.Setup(mock =>
+                mock.DispatchAsync(It.IsAny<RemoveItemByNameCommand>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new ItemNotFoundException());
+        
+        // Act 
+        var exception = await Record.ExceptionAsync(() => sut.RemoveItemByName("Non-existent item"));
+        
+        // Assert
+        exception.Should().BeOfType<ItemNotFoundException>();
     }
 }

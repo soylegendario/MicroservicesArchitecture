@@ -1,85 +1,61 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using AutoFixture.Xunit2;
 using FluentAssertions;
+using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
 using Inventory.Application.Services;
 using Inventory.CrossCutting.Cqrs.Queries;
-using Inventory.CrossCutting.Events;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Persistence;
 using Inventory.Infrastructure.Queries;
-using Inventory.Infrastructure.Repository;
-using Microsoft.Extensions.Logging;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 
 namespace Inventory.UnitTests;
 
-[TestFixture]
 public class ItemReadServiceTests
 {
-    private Mock<InventoryInMemoryContext> _inventoryInMemoryContextMock = null!;
-    private ItemReadService _itemReadService = null!;
-
-    [SetUp]
-    public void SetUp()
-    {
-        _inventoryInMemoryContextMock = new Mock<InventoryInMemoryContext>();
-        var itemRepository = new ItemInMemoryRepository(Mock.Of<ILogger<ItemInMemoryRepository>>(),
-            _inventoryInMemoryContextMock.Object);
-
-        var serviceProvider = new Mock<IServiceProvider>();
-        serviceProvider.Setup(x => x.GetService(typeof(IQueryHandler<GetAllItemsQuery, IEnumerable<Item>>)))
-            .Returns(new GetAllItemsQueryHandler(Mock.Of<ILogger<GetAllItemsQueryHandler>>(),
-                itemRepository));
-        serviceProvider.Setup(x => x.GetService(typeof(IQueryHandler<GetItemsByExpirationDateQuery, IEnumerable<Item>>)))
-            .Returns(new GetItemsByExpirationDateQueryHandler(Mock.Of<ILogger<GetItemsByExpirationDateQueryHandler>>(),
-                itemRepository));
-        
-        _itemReadService = new ItemReadService(Mock.Of<ILogger<ItemReadService>>(),
-            new QueryDispatcher(serviceProvider.Object), new ItemMapper(Mock.Of<ILogger<ItemMapper>>()),
-            Mock.Of<IEventBus>());
-    }
-
-    [Test]
-    public async Task GetAllItems_ReturnsAllItems()
+    [Theory]
+    [AutoMoqData]
+    internal async Task GetAllItems_ReturnsAllItems(
+        List<ItemDto> expected,
+        [Frozen] Mock<IItemMapper> mapper,
+        ItemReadService sut)
     {
         // Arrange
-        var expected = new List<Item>
-        {
-            new() { Id = Guid.NewGuid(), Name = "Item 1"},
-            new() { Id = Guid.NewGuid(), Name = "Item 2"},
-            new() { Id = Guid.NewGuid(), Name = "Item 3"}
-        };
-        _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(expected);
+        mapper.Setup(mock => mock.Map(It.IsAny<IEnumerable<Item>>())).Returns(expected);
 
         // Act
-        var actual = await _itemReadService.GetAllItems();
+        var actual = await sut.GetAllItems();
 
         // Assert
         actual.Should().BeEquivalentTo(expected);
     }
     
-    [Test]
-    public async Task NotifyExpiredItems_ReturnsAllExpiredItems()
+    [Theory]
+    [AutoMoqData]
+    internal async Task NotifyExpiredItems_ReturnsAllExpiredItems(
+        [Frozen] Mock<IQueryDispatcher> queryDispatcher,
+        ItemReadService sut)
     {
         // Arrange
         var expected = new List<Item>
         {
-            new() { Id = Guid.NewGuid(), Name = "Item 1", ExpirationDate = DateTime.Now.AddDays(-1)},
-            new() { Id = Guid.NewGuid(), Name = "Item 2", ExpirationDate = DateTime.Now.AddDays(-2)},
-            new() { Id = Guid.NewGuid(), Name = "Item 3", ExpirationDate = DateTime.Now.AddDays(-3)},
-            new() { Id = Guid.NewGuid(), Name = "Item 4", ExpirationDate = DateTime.Now.AddDays(1)},
-            new() { Id = Guid.NewGuid(), Name = "Item 5", ExpirationDate = DateTime.Now.AddDays(2)},
-            new() { Id = Guid.NewGuid(), Name = "Item 6", ExpirationDate = DateTime.Now.AddDays(3)}
+            new() { Id = Guid.NewGuid(), Name = "Item 1", ExpirationDate = DateTime.Now.AddDays(-1)}
         };
-        _inventoryInMemoryContextMock.Setup(i => i.Items).Returns(expected);
+        queryDispatcher.Setup(mock =>
+                mock.DispatchAsync<GetItemsByExpirationDateQuery, IEnumerable<Item>>(
+                    It.IsAny<GetItemsByExpirationDateQuery>(), 
+                    It.IsAny<CancellationToken>()))
+            .ReturnsAsync(expected);
 
         // Act
-        var expiredItems = await _itemReadService.NotifyExpiredItems();
+        var expiredItems = await sut.NotifyExpiredItems();
 
         // Assert
-        Assert.AreEqual(1, expiredItems);
+        Assert.Equal(1, expiredItems);
     }
 }

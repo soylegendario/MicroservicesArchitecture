@@ -1,92 +1,88 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using AutoFixture;
+using AutoFixture.Xunit2;
+using FluentAssertions;
 using Inventory.CrossCutting.Exceptions;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Persistence;
 using Inventory.Infrastructure.Repository;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 
 namespace Inventory.UnitTests;
 
-[TestFixture]
 public class ItemRepositoryTests
 {
-    private IItemRepository _itemRepository = null!;
-    private InventoryInMemoryContext _inventoryContext = null!;
-    private Item _item = null!;
-
-    [SetUp]
-    public void SetUp()
-    {
-        _inventoryContext = new InventoryInMemoryContext();
-        var logger = Mock.Of<ILogger<ItemInMemoryRepository>>();
-        _itemRepository = new ItemInMemoryRepository(logger, _inventoryContext);
-        _item = new Item
-        {
-            Name = "Test Item", 
-            ExpirationDate = DateTime.UtcNow.AddDays(10)
-        };
-    }
-
-    [Test]
-    public void CanAddItem()
+    private readonly Item _item = new Fixture().Create<Item>();
+    
+    [Theory]
+    [AutoMoqData]
+    internal void CanAddItem(ItemInMemoryRepository sut)
     {
         // Act
-        _itemRepository.AddItem(_item);
+        sut.AddItem(_item);
         
         // Assert
-        Assert.AreEqual(1, _inventoryContext.Items.Count);
-        Assert.NotNull(_item.Id);
-        Assert.AreEqual(DateTime.UtcNow.AddDays(10).Date, _item.ExpirationDate.Date);
+        var items = sut.GetAllItems();
+        items.Should().HaveCount(1);
     }
 
-    [Test]
-    public void CanGetAllItems()
-    {
-        // Act
-        _itemRepository.AddItem(_item);
-        var items = _itemRepository.GetAllItems();
-
-        // Assert
-        Assert.AreEqual(1, items.Count());
-    }
-
-    [Test]
-    public void GetItemsByExpirationDate_ReturnsItemsWithGivenExpirationDate()
+    [Theory]
+    [AutoMoqData]
+    internal void CanGetAllItems(ItemInMemoryRepository sut)
     {
         // Arrange
-        _itemRepository.AddItem(_item);
+        sut.AddItem(_item);
+        
+        // Act
+        var items = sut.GetAllItems();
+
+        // Assert
+        items.Should().HaveCount(1);
+    }
+
+    [Theory]
+    [AutoMoqData]
+    internal void GetItemsByExpirationDate_ReturnsItemsWithGivenExpirationDate(ItemInMemoryRepository sut)
+    {
+        // Arrange
+        sut.AddItem(_item);
         var expirationDate = DateTime.UtcNow.AddDays(1);
         var item = new Item { ExpirationDate = expirationDate };
-        _itemRepository.AddItem(item);
+        sut.AddItem(item);
 
         // Act
-        var items = _itemRepository.GetItemsByExpirationDate(expirationDate).ToArray();
+        var items = sut.GetItemsByExpirationDate(expirationDate).ToArray();
 
         // Assert
-        Assert.AreEqual(1, items.Length);
-        Assert.AreEqual(expirationDate, items.First().ExpirationDate);
+        items.Should().HaveCount(1);
+        items[0].ExpirationDate.Should().Be(expirationDate);
     }
     
-    [Test]
-    public void CanRemoveItem()
+    [Theory]
+    [AutoMoqData]
+    internal void CanRemoveItem(
+        ItemInMemoryRepository sut)
     {
         // Arrange
-        _inventoryContext.Items.Add(_item);
+        sut.AddItem(_item);
         
         // Act
-        _itemRepository.RemoveItemByName("Test Item");
+        sut.RemoveItemByName(_item.Name);
     
         // Assert
-        Assert.AreEqual(0, _inventoryContext.Items.Count);
+        var items = sut.GetAllItems();
+        items.Should().BeEmpty();
     }
     
-    [Test]
-    public void TryRemoveItemByName_WhenItemDoesNotExist_ThrowsItemNotFoundException()
+    [Theory]
+    [AutoMoqData]
+    internal void TryRemoveItemByName_WhenItemDoesNotExist_ThrowsItemNotFoundException(ItemInMemoryRepository sut)
     {
-        Assert.Throws<ItemNotFoundException>(() => _itemRepository.RemoveItemByName("Non-existent Item"));
+        Assert.Throws<ItemNotFoundException>(() => sut.RemoveItemByName("Non-existent Item"));
     }
     
 }
