@@ -16,13 +16,13 @@ internal class ItemWriteService : IItemWriteService
     private readonly ICommandDispatcher _commandDispatcher;
     private readonly IItemMapper _itemMapper;
     private readonly IEventBus _eventBus;
-    private readonly AbstractValidator<ItemDto> _validator;
+    private readonly IValidator<ItemDto> _validator;
 
     public ItemWriteService(ILogger<ItemWriteService> logger,
         ICommandDispatcher commandDispatcher,
         IItemMapper itemMapper,
         IEventBus eventBus,
-        AbstractValidator<ItemDto> validator)
+        IValidator<ItemDto> validator)
     {
         _logger = logger;
         _commandDispatcher = commandDispatcher;

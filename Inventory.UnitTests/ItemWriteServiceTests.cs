@@ -37,40 +37,27 @@ public class ItemWriteServiceTests
 
     [Theory]
     [AutoMoqData]
-    internal void AddItem_GivenEmptyName_ThrowsValidationException(
+    internal async Task GivenANotValidItem_WhenAddItemIsCalled_ShouldThrowsValidationException(
         ItemDto item,
         [Frozen] Mock<IValidator<ItemDto>> validator,
         ItemWriteService sut)
     {
         // Arrange
         item.Name = "";
+        validator.Setup(mock =>
+                mock.Validate(item))
+            .Returns(new ValidationResult(new[]
+            {
+                new ValidationFailure("", "")
+            }));
         
-        // Act
-        var exception = Record.ExceptionAsync(() => sut.AddItem(item));
-
-        // Assert
-        exception.Should().BeOfType<ValidationException>();
-    }
-    
-    [Theory]
-    [AutoMoqData]
-    internal async Task AddItem_GivenExpirationDateInThePast_ThrowsValidationException(
-        ItemDto item,
-        [Frozen] Mock<InventoryInMemoryContext> context,
-        ItemWriteService sut)
-    {
-        // Arrange
-        context.Setup(i => i.Items).Returns(new List<Item>());
-        item.ExpirationDate = DateTime.Now.AddDays(-1);
-
         // Act
         var exception = await Record.ExceptionAsync(() => sut.AddItem(item));
-        
+
         // Assert
         exception.Should().BeOfType<ValidationException>();
     }
     
-
     [Theory]
     [AutoMoqData]
     internal async Task RemoveItemByName_RemovesItem(
