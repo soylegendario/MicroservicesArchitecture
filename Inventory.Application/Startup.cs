@@ -12,7 +12,7 @@ public static class Startup
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddTransient<AbstractValidator<ItemDto>, ItemValidator>();
+        services.AddTransient<IValidator<ItemDto>, ItemValidator>();
         services.AddTransient<IItemMapper, ItemMapper>();
         services.AddTransient<IItemReadService, ItemReadService>();
         services.AddTransient<IItemWriteService, ItemWriteService>();
