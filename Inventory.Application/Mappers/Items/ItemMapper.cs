@@ -16,18 +16,13 @@ internal class ItemMapper : IItemMapper
     {
         _logger = logger;
     }
+    
 
     /// <inheritdoc />
     public ItemDto Map(Item item)
     {
         _logger.LogInformation("Mapping item to dto");
-        var itemDto = new ItemDto
-        {
-            Id = item.Id,
-            Name = item.Name,
-            ExpirationDate = item.ExpirationDate
-        };
-        return itemDto;
+        return (ItemDto)item;
     }
 
     /// <inheritdoc />
@@ -41,12 +36,6 @@ internal class ItemMapper : IItemMapper
     public Item Map(ItemDto itemDto)
     {
         _logger.LogInformation("Mapping dto to item");
-        var item = new Item
-        {
-            Id = itemDto.Id ?? Guid.Empty,
-            Name = itemDto.Name,
-            ExpirationDate = itemDto.ExpirationDate
-        };
-        return item;
+        return (Item)itemDto;
     }
 }
