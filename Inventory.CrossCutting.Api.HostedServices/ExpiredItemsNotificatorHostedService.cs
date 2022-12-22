@@ -2,9 +2,9 @@ using Inventory.Application.Contracts;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Inventory.Api.HostedServices;
+namespace Inventory.CrossCutting.Api.HostedServices;
 
-public class ExpiredItemsNotificatorHostedService : IHostedService, IDisposable
+public sealed class ExpiredItemsNotificatorHostedService : IHostedService, IDisposable
 {
     private readonly IItemReadService _itemReadService;
     private readonly ILogger<ExpiredItemsNotificatorHostedService> _logger;

@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{1B585F07-05A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Api", "Inventory.Api\Inventory.Api.csproj", "{6D882561-5C9B-41BD-800D-52016403D3B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Api.Authentication", "Inventory.Api.Authentication\Inventory.Api.Authentication.csproj", "{0ABF3605-8771-474F-81CE-2F7DF5F1D632}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.CrossCutting.Api.Authentication", "Inventory.CrossCutting.Api.Authentication\Inventory.CrossCutting.Api.Authentication.csproj", "{0ABF3605-8771-474F-81CE-2F7DF5F1D632}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.CrossCutting.Cqrs", "Inventory.CrossCutting.Cqrs\Inventory.CrossCutting.Cqrs.csproj", "{A315BDC2-8A65-423D-A3A4-C5DD89D07263}"
 EndProject
@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.CrossCutting.Exce
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrossCutting", "CrossCutting", "{2E815CA7-9742-454A-BC70-75D598D3FD2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Api.HostedServices", "Inventory.Api.HostedServices\Inventory.Api.HostedServices.csproj", "{860AFD81-CCA4-48D4-AEBC-6B0E5BC40D6D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.CrossCutting.Api.HostedServices", "Inventory.CrossCutting.Api.HostedServices\Inventory.CrossCutting.Api.HostedServices.csproj", "{860AFD81-CCA4-48D4-AEBC-6B0E5BC40D6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,10 +81,10 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9B209A91-650B-4885-B77D-D59575CD46A7} = {1B585F07-05A3-40AA-A32C-D2079ED02D77}
 		{6D882561-5C9B-41BD-800D-52016403D3B2} = {1B585F07-05A3-40AA-A32C-D2079ED02D77}
-		{0ABF3605-8771-474F-81CE-2F7DF5F1D632} = {1B585F07-05A3-40AA-A32C-D2079ED02D77}
 		{A315BDC2-8A65-423D-A3A4-C5DD89D07263} = {2E815CA7-9742-454A-BC70-75D598D3FD2B}
 		{069F1C9A-676F-4192-8C0D-1FEAB6BED28B} = {2E815CA7-9742-454A-BC70-75D598D3FD2B}
 		{96892749-31E3-429B-AD33-698CC613EC42} = {2E815CA7-9742-454A-BC70-75D598D3FD2B}
-		{860AFD81-CCA4-48D4-AEBC-6B0E5BC40D6D} = {1B585F07-05A3-40AA-A32C-D2079ED02D77}
+		{0ABF3605-8771-474F-81CE-2F7DF5F1D632} = {2E815CA7-9742-454A-BC70-75D598D3FD2B}
+		{860AFD81-CCA4-48D4-AEBC-6B0E5BC40D6D} = {2E815CA7-9742-454A-BC70-75D598D3FD2B}
 	EndGlobalSection
 EndGlobal

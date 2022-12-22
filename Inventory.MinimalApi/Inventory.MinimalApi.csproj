@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Inventory.Api.Authentication\Inventory.Api.Authentication.csproj" />
-    <ProjectReference Include="..\Inventory.Api.HostedServices\Inventory.Api.HostedServices.csproj" />
+    <ProjectReference Include="..\Inventory.CrossCutting.Api.Authentication\Inventory.CrossCutting.Api.Authentication.csproj" />
+    <ProjectReference Include="..\Inventory.CrossCutting.Api.HostedServices\Inventory.CrossCutting.Api.HostedServices.csproj" />
     <ProjectReference Include="..\Inventory.Application\Inventory.Application.csproj" />
   </ItemGroup>
 
