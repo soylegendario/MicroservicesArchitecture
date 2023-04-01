@@ -20,7 +20,7 @@ public class ItemRepositoryTests
     
     [Theory]
     [AutoMoqData]
-    internal void CanAddItem(ItemInMemoryRepository sut)
+    internal void CanAddItem(ItemRepository sut)
     {
         // Act
         sut.AddItem(_item);
@@ -32,7 +32,7 @@ public class ItemRepositoryTests
 
     [Theory]
     [AutoMoqData]
-    internal void CanGetAllItems(ItemInMemoryRepository sut)
+    internal void CanGetAllItems(ItemRepository sut)
     {
         // Arrange
         sut.AddItem(_item);
@@ -46,7 +46,7 @@ public class ItemRepositoryTests
 
     [Theory]
     [AutoMoqData]
-    internal void GetItemsByExpirationDate_ReturnsItemsWithGivenExpirationDate(ItemInMemoryRepository sut)
+    internal void GetItemsByExpirationDate_ReturnsItemsWithGivenExpirationDate(ItemRepository sut)
     {
         // Arrange
         sut.AddItem(_item);
@@ -65,7 +65,7 @@ public class ItemRepositoryTests
     [Theory]
     [AutoMoqData]
     internal void CanRemoveItem(
-        ItemInMemoryRepository sut)
+        ItemRepository sut)
     {
         // Arrange
         sut.AddItem(_item);
@@ -80,7 +80,7 @@ public class ItemRepositoryTests
     
     [Theory]
     [AutoMoqData]
-    internal void TryRemoveItemByName_WhenItemDoesNotExist_ThrowsItemNotFoundException(ItemInMemoryRepository sut)
+    internal void TryRemoveItemByName_WhenItemDoesNotExist_ThrowsItemNotFoundException(ItemRepository sut)
     {
         Assert.Throws<ItemNotFoundException>(() => sut.RemoveItemByName("Non-existent Item"));
     }

@@ -7,10 +7,12 @@ using Inventory.Infrastructure.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("AppSettings.json", optional: false).Build();
 
 services
     .AddApiServices()
-    .AddInfrastructureServices()
+    .AddInfrastructureServices(configuration)
     .AddApplicationServices();
 
 var app = builder.Build();

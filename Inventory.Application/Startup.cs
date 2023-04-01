@@ -12,10 +12,10 @@ public static class Startup
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddTransient<IValidator<ItemDto>, ItemValidator>();
-        services.AddTransient<IItemMapper, ItemMapper>();
-        services.AddTransient<IItemReadService, ItemReadService>();
-        services.AddTransient<IItemWriteService, ItemWriteService>();
+        services.AddScoped<IValidator<ItemDto>, ItemValidator>();
+        services.AddScoped<IItemMapper, ItemMapper>();
+        services.AddScoped<IItemReadService, ItemReadService>();
+        services.AddScoped<IItemWriteService, ItemWriteService>();
 
         return services;
     }
