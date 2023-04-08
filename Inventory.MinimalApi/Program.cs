@@ -72,9 +72,24 @@ app.MapPost("/items",
         async ([FromBody] ItemDto item, [FromServices] IItemWriteService itemWriteService) =>
     {
         app.Logger.LogInformation("POST: /items");
-        await itemWriteService.AddItem(item);
+        await itemWriteService.AddItemAsync(item);
         return Results.StatusCode((int)HttpStatusCode.Created);
     })
+    .WithName("PostItem");
+
+app.MapPut("/items", 
+        [Authorize] 
+        [SwaggerOperation("Update a new item")]
+        [SwaggerResponse(204, Description = "Updated")]
+        [SwaggerResponse(400, Description = "Bad request")]
+        [SwaggerResponse(401, Description = "Unauthorized")]
+        [SwaggerResponse(500, Description = "Unexpected error")]
+        async ([FromBody] ItemDto item, [FromServices] IItemWriteService itemWriteService) =>
+        {
+            app.Logger.LogInformation("PUT: /items");
+            await itemWriteService.UpdateItemAsync(item);
+            return Results.StatusCode((int)HttpStatusCode.NoContent);
+        })
     .WithName("PostItem");
 
 app.MapDelete("/items/{name}", 
@@ -88,7 +103,7 @@ app.MapDelete("/items/{name}",
         async (string name, [FromServices] IItemWriteService itemWriteService) =>
     {
         app.Logger.LogInformation("DELETE: /items/{Name}", name);
-        await itemWriteService.RemoveItemByName(name);
+        await itemWriteService.RemoveItemByNameAsync(name);
         return Results.Ok();
     })
     .WithName("DeleteItem");

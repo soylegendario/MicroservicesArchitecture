@@ -8,11 +8,18 @@ public interface IItemWriteService
     /// Add item to inventory
     /// </summary>
     /// <param name="item">Item to ada</param>
-    Task AddItem(ItemDto item);
+    Task AddItemAsync(ItemDto item);
     
     /// <summary>
     /// Remove item from inventory
     /// </summary>
     /// <param name="name">Name of item to remove</param>
-    Task RemoveItemByName(string name);
+    Task RemoveItemByNameAsync(string name);
+
+    /// <summary>
+    /// Update a item from inventory
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    Task UpdateItemAsync(ItemDto item);
 }

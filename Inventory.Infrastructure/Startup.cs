@@ -22,7 +22,7 @@ public static class Startup
         services.AddScoped<IQueryHandler<GetItemsByExpirationDateQuery, IEnumerable<Item>>, GetItemsByExpirationDateQueryHandler>();
         services.AddScoped<ICommandHandler<AddItemCommand>, AddItemCommandHandler>();
         services.AddScoped<ICommandHandler<RemoveItemByNameCommand>, RemoveItemByNameCommandHandler>();
-        // services.AddSingleton<InventoryInMemoryContext>();
+        services.AddScoped<ICommandHandler<UpdateItemCommand>, UpdateItemCommandHandler>();
         services.AddScoped<IItemRepository, ItemRepository>();
 
         var connString = configurationRoot.GetConnectionString("InventoryItems");

@@ -1,6 +1,7 @@
 ﻿using Inventory.CrossCutting.Exceptions;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Inventory.Infrastructure.Repository;
 
@@ -38,6 +39,27 @@ public class ItemRepository : IItemRepository
         }
 
         _context.Remove(item);
+        _context.SaveChanges();
+    }
+
+    public void UpdateItem(Item item)
+    {
+        // Option 1
+        var entity = _context.Entry(item);
+        entity.State = EntityState.Modified;
+        
+        // // Option 2
+        // _context.Update(item);
+        //
+        // // Option 3
+        // var entity2 = _context.Items.Find(item.Id);
+        // if (entity2 == null)
+        // {
+        //     throw new ItemNotFoundException($"Item {item.Id} not found");
+        // }
+        // entity2.Name = item.Name;
+        // entity2.ExpirationDate = item.ExpirationDate;
+        
         _context.SaveChanges();
     }
 }
