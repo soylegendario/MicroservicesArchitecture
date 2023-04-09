@@ -1,4 +1,5 @@
-﻿using Inventory.CrossCutting.Exceptions;
+﻿using Inventory.CrossCutting.Data;
+using Inventory.CrossCutting.Exceptions;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Persistence;
 

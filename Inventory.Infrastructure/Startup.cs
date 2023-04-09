@@ -1,5 +1,6 @@
 using Inventory.CrossCutting.Cqrs.Commands;
 using Inventory.CrossCutting.Cqrs.Queries;
+using Inventory.CrossCutting.Data;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Commands;
 using Inventory.Infrastructure.Persistence;
@@ -24,6 +25,7 @@ public static class Startup
         services.AddScoped<ICommandHandler<RemoveItemByNameCommand>, RemoveItemByNameCommandHandler>();
         services.AddScoped<ICommandHandler<UpdateItemCommand>, UpdateItemCommandHandler>();
         services.AddScoped<IItemRepository, ItemRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork<InventoryDbContext>>();
 
         var connString = configurationRoot.GetConnectionString("InventoryItems");
         services.AddDbContext<InventoryDbContext>(options => 

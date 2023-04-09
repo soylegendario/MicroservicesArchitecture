@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrossCutting", "CrossCuttin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.CrossCutting.Api.HostedServices", "Inventory.CrossCutting.Api.HostedServices\Inventory.CrossCutting.Api.HostedServices.csproj", "{860AFD81-CCA4-48D4-AEBC-6B0E5BC40D6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.CrossCutting.Data", "Inventory.CrossCutting.Data\Inventory.CrossCutting.Data.csproj", "{FD1DCCB6-EF2C-41BA-A7E2-FDF24AE36908}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{860AFD81-CCA4-48D4-AEBC-6B0E5BC40D6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{860AFD81-CCA4-48D4-AEBC-6B0E5BC40D6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{860AFD81-CCA4-48D4-AEBC-6B0E5BC40D6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD1DCCB6-EF2C-41BA-A7E2-FDF24AE36908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD1DCCB6-EF2C-41BA-A7E2-FDF24AE36908}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD1DCCB6-EF2C-41BA-A7E2-FDF24AE36908}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD1DCCB6-EF2C-41BA-A7E2-FDF24AE36908}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9B209A91-650B-4885-B77D-D59575CD46A7} = {1B585F07-05A3-40AA-A32C-D2079ED02D77}
@@ -86,5 +92,6 @@ Global
 		{96892749-31E3-429B-AD33-698CC613EC42} = {2E815CA7-9742-454A-BC70-75D598D3FD2B}
 		{0ABF3605-8771-474F-81CE-2F7DF5F1D632} = {2E815CA7-9742-454A-BC70-75D598D3FD2B}
 		{860AFD81-CCA4-48D4-AEBC-6B0E5BC40D6D} = {2E815CA7-9742-454A-BC70-75D598D3FD2B}
+		{FD1DCCB6-EF2C-41BA-A7E2-FDF24AE36908} = {2E815CA7-9742-454A-BC70-75D598D3FD2B}
 	EndGlobalSection
 EndGlobal
