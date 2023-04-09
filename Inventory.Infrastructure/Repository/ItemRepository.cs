@@ -1,7 +1,6 @@
 ﻿using Inventory.CrossCutting.Exceptions;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace Inventory.Infrastructure.Repository;
 
