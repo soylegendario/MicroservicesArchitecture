@@ -5,7 +5,7 @@ using Inventory.Domain.Items;
 using Inventory.Infrastructure.Commands;
 using Inventory.Infrastructure.Persistence;
 using Inventory.Infrastructure.Queries;
-using Inventory.Infrastructure.Repository;
+using Inventory.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

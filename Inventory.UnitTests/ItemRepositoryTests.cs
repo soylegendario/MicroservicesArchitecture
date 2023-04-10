@@ -7,7 +7,7 @@ using FluentAssertions;
 using Inventory.CrossCutting.Exceptions;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Persistence;
-using Inventory.Infrastructure.Repository;
+using Inventory.Infrastructure.Repositories;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;

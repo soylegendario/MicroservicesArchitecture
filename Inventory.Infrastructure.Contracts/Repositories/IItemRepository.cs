@@ -1,6 +1,9 @@
-namespace Inventory.Domain.Items;
+using Inventory.CrossCutting.Data;
+using Inventory.Domain.Items;
 
-public interface IItemRepository
+namespace Inventory.Infrastructure.Repositories;
+
+public interface IItemRepository : IRepository
 {
     void AddItem(Item item);
     

@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Inventory.CrossCutting.Data;
+﻿namespace Inventory.CrossCutting.Data;
 
 /// <summary>
 /// The unit of work

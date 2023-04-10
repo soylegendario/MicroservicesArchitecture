@@ -1,5 +1,7 @@
 using Inventory.CrossCutting.Cqrs.Queries;
+using Inventory.CrossCutting.Data;
 using Inventory.Domain.Items;
+using Inventory.Infrastructure.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace Inventory.Infrastructure.Queries;
@@ -7,18 +9,17 @@ namespace Inventory.Infrastructure.Queries;
 internal class GetAllItemsQueryHandler : IQueryHandler<GetAllItemsQuery, IEnumerable<Item>>
 {
     private readonly ILogger<GetAllItemsQueryHandler> _logger;
-    private readonly IItemRepository _itemRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-
-    public GetAllItemsQueryHandler(ILogger<GetAllItemsQueryHandler> logger, IItemRepository itemRepository)
+    public GetAllItemsQueryHandler(ILogger<GetAllItemsQueryHandler> logger, IUnitOfWork unitOfWork)
     {
         _logger = logger;
-        _itemRepository = itemRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public Task<IEnumerable<Item>> HandleAsync(GetAllItemsQuery query, CancellationToken cancellation = default)
     {
         _logger.LogInformation("GetAllItemsQueryHandler: Handling GetAllItemsQuery");
-        return Task.FromResult(_itemRepository.GetAllItems());
+        return Task.FromResult(_unitOfWork.Repository<IItemRepository>().GetAllItems());
     }
 }
