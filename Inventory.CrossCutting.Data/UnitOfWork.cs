@@ -25,7 +25,7 @@ public class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
     /// <inheritdoc />
     public T Repository<T>() where T : IRepository
     {
-        return (T)_repositories.GetOrAdd(typeof(T), type => _serviceProvider.GetRequiredService<T>());
+        return (T)_repositories.GetOrAdd(typeof(T), _ => _serviceProvider.GetRequiredService<T>());
     }
 
     /// <inheritdoc />
