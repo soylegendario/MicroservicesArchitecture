@@ -90,7 +90,7 @@ app.MapPut("/items",
             await itemWriteService.UpdateItemAsync(item);
             return Results.StatusCode((int)HttpStatusCode.NoContent);
         })
-    .WithName("PostItem");
+    .WithName("PutItem");
 
 app.MapDelete("/items/{name}", 
         [Authorize] 
