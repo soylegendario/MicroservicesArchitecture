@@ -7,7 +7,6 @@ namespace Inventory.CrossCutting.Data;
 /// <inheritdoc />
 public class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
 {
-    private readonly object _lock = new();
     private readonly IServiceProvider _serviceProvider;
     private readonly DbContext _context;
     private readonly ConcurrentDictionary<Type, IRepository> _repositories = new();
@@ -26,18 +25,7 @@ public class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
     /// <inheritdoc />
     public T Repository<T>() where T : IRepository
     {
-        if (_repositories.TryGetValue(typeof(T), out var repository))
-        {
-            return (T)repository;
-        }
-
-        lock (_lock)
-        {
-            repository = _serviceProvider.GetRequiredService<T>();
-            repository.SetContext(_context);
-            _repositories.TryAdd(typeof(T), repository);
-            return (T)repository;
-        }
+        return (T)_repositories.GetOrAdd(typeof(T), type => _serviceProvider.GetRequiredService<T>());
     }
 
     /// <inheritdoc />
