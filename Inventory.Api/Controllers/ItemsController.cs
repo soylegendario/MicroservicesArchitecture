@@ -44,13 +44,12 @@ public class ItemsController : ControllerBase
     public async Task<IActionResult> Post([FromBody] ItemDto item)
     {
         _logger.LogInformation("POST: /items");
-        await _itemWriteService.AddItem(item);
+        await _itemWriteService.AddItemAsync(item);
         return StatusCode(StatusCodes.Status201Created);
     }
     
-    [HttpDelete]
+    [HttpDelete("/{name}")]
     [Authorize]
-    [Route("/{name}")]
     [SwaggerOperation("Delete a item by name")]
     [SwaggerResponse(200, Description = "Operation success")]
     [SwaggerResponse(400, Description = "Bad request")]
@@ -60,7 +59,22 @@ public class ItemsController : ControllerBase
     public async Task<IActionResult> Delete(string name)
     {
         _logger.LogInformation("DELETE: /items");
-        await _itemWriteService.RemoveItemByName(name);
+        await _itemWriteService.RemoveItemByNameAsync(name);
         return Ok();
+    }
+
+    [HttpPut]
+    [Authorize]
+    [SwaggerOperation("Update a item")]
+    [SwaggerResponse(204, Description = "Operation success")]
+    [SwaggerResponse(400, Description = "Bad request")]
+    [SwaggerResponse(401, Description = "Unauthorized")]
+    [SwaggerResponse(404, Description = "Not found")]
+    [SwaggerResponse(500, Description = "Unexpected error")]
+    public async Task<IActionResult> Update([FromBody] ItemDto item)
+    {        
+        _logger.LogInformation("PUT: /items");
+        await _itemWriteService.UpdateItemAsync(item);
+        return StatusCode(StatusCodes.Status204NoContent);
     }
 }

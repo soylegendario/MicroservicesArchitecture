@@ -1,5 +1,7 @@
 using Inventory.CrossCutting.Cqrs.Commands;
+using Inventory.CrossCutting.Data;
 using Inventory.Domain.Items;
+using Inventory.Infrastructure.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace Inventory.Infrastructure.Commands;
@@ -7,12 +9,12 @@ namespace Inventory.Infrastructure.Commands;
 internal class AddItemCommandHandler : ICommandHandler<AddItemCommand>
 {
     private readonly ILogger<AddItemCommandHandler> _logger;
-    private readonly IItemRepository _itemRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public AddItemCommandHandler(ILogger<AddItemCommandHandler> logger, IItemRepository itemRepository)
+    public AddItemCommandHandler(ILogger<AddItemCommandHandler> logger, IUnitOfWork unitOfWork)
     {
         _logger = logger;
-        _itemRepository = itemRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public Task HandleAsync(AddItemCommand command, CancellationToken cancellation = default)
@@ -20,7 +22,7 @@ internal class AddItemCommandHandler : ICommandHandler<AddItemCommand>
         _logger.LogInformation("Adding item with Name: {Name} and ExpirationDate {ExpirationDate}",
             command.Item.Name,
             command.Item.ExpirationDate);
-        _itemRepository.AddItem(command.Item);
-        return Task.CompletedTask;
+        _unitOfWork.Repository<IItemRepository>().AddItem(command.Item);
+        return _unitOfWork.SaveChangesAsync();
     }
 }

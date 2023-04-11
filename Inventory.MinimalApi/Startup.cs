@@ -42,7 +42,8 @@ public static class Startup
             .AddAuthentication("BasicAuthentication")
             .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
         services.AddAuthorization();
-        services.AddHostedService<ExpiredItemsNotificatorHostedService>();
+        // TODO: Enable hosted service (fix DI issue con scoped services)
+        // services.AddHostedService<ExpiredItemsNotificatorHostedService>();
         services.AddSingleton<IEventBus, EventBus>();
 
         return services;

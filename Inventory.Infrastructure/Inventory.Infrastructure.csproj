@@ -9,12 +9,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Inventory.CrossCutting.Cqrs\Inventory.CrossCutting.Cqrs.csproj" />
+      <ProjectReference Include="..\Inventory.CrossCutting.Data\Inventory.CrossCutting.Data.csproj" />
       <ProjectReference Include="..\Inventory.CrossCutting.Exceptions\Inventory.CrossCutting.Exceptions.csproj" />
       <ProjectReference Include="..\Inventory.Domain\Inventory.Domain.csproj" />
+      <ProjectReference Include="..\Inventory.Infrastructure.Contracts\Inventory.Infrastructure.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.4" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     </ItemGroup>
 
 </Project>

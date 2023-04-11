@@ -29,7 +29,7 @@ public class ItemWriteServiceTests
         // Arrange
 
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.AddItem(item));
+        var exception = await Record.ExceptionAsync(() => sut.AddItemAsync(item));
         
         // Assert
         Assert.Null(exception);
@@ -52,7 +52,7 @@ public class ItemWriteServiceTests
             }));
         
         // Act
-        var exception = await Record.ExceptionAsync(() => sut.AddItem(item));
+        var exception = await Record.ExceptionAsync(() => sut.AddItemAsync(item));
 
         // Assert
         exception.Should().BeOfType<ValidationException>();
@@ -67,7 +67,7 @@ public class ItemWriteServiceTests
         // Arrange
         
         // Assert
-        var exception = await Record.ExceptionAsync(() => sut.RemoveItemByName(items[0].Name));
+        var exception = await Record.ExceptionAsync(() => sut.RemoveItemByNameAsync(items[0].Name));
         
         // Assert
         Assert.Null(exception);
@@ -85,7 +85,7 @@ public class ItemWriteServiceTests
             .ThrowsAsync(new ItemNotFoundException());
         
         // Act 
-        var exception = await Record.ExceptionAsync(() => sut.RemoveItemByName("Non-existent item"));
+        var exception = await Record.ExceptionAsync(() => sut.RemoveItemByNameAsync("Non-existent item"));
         
         // Assert
         exception.Should().BeOfType<ItemNotFoundException>();

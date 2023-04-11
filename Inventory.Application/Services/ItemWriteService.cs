@@ -32,7 +32,7 @@ internal class ItemWriteService : IItemWriteService
     }
 
     /// <inheritdoc />
-    public Task AddItem(ItemDto item)
+    public Task AddItemAsync(ItemDto item)
     {
         _logger.LogInformation("Adding item");
         var validationResult = _validator.Validate(item);
@@ -48,7 +48,7 @@ internal class ItemWriteService : IItemWriteService
     }
 
     /// <inheritdoc />
-    public async Task RemoveItemByName(string name)
+    public async Task RemoveItemByNameAsync(string name)
     {
         _logger.LogInformation("Removing item by name");
         var command = new RemoveItemByNameCommand
@@ -60,5 +60,16 @@ internal class ItemWriteService : IItemWriteService
         {
             Name = name
         });
+    }
+
+    /// <inheritdoc />
+    public async Task UpdateItemAsync(ItemDto item)
+    {
+        _logger.LogInformation("Updating item");
+        var command = new UpdateItemCommand()
+        {
+            Item = _itemMapper.Map(item)
+        };
+        await _commandDispatcher.DispatchAsync(command);
     }
 }
