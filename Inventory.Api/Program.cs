@@ -4,6 +4,7 @@ using Inventory.CrossCutting.Events;
 using Inventory.CrossCutting.Exceptions;
 using Inventory.Infrastructure;
 using Inventory.Infrastructure.Events;
+using Inventory.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -33,6 +34,9 @@ app.UseMiddleware<GlobalExceptionHandler>();
 // Subscribe to events
 using (var scope = app.Services.CreateScope())
 {
+    var context = scope.ServiceProvider.GetRequiredService<InventoryDbContext>();
+    context.Database.EnsureCreated();
+    
     var eventBus = scope.ServiceProvider.GetRequiredService<IEventBus>();
     eventBus.Subscribe<ItemRemovedEvent>(payload =>
     {
