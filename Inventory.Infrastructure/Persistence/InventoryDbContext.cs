@@ -5,13 +5,12 @@ namespace Inventory.Infrastructure.Persistence;
 
 public sealed class InventoryDbContext : DbContext
 {
-    public DbSet<Item> Items { get; set; }
+    public DbSet<Item> Items { get; set; } = null!;
 
     public InventoryDbContext(DbContextOptions<InventoryDbContext> options) : base(options)
     {
-        Database.EnsureCreated();
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Item>(entity =>

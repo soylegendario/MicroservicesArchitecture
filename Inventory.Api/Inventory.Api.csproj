@@ -5,6 +5,8 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <LangVersion>default</LangVersion>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>c693e4c9-ccbd-47c4-859f-dfc5a3fbf937</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,6 +19,12 @@
       <ProjectReference Include="..\Inventory.CrossCutting.Api.Authentication\Inventory.CrossCutting.Api.Authentication.csproj" />
       <ProjectReference Include="..\Inventory.CrossCutting.Api.HostedServices\Inventory.CrossCutting.Api.HostedServices.csproj" />
       <ProjectReference Include="..\Inventory.Application\Inventory.Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>
