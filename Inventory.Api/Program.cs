@@ -5,6 +5,8 @@ using Inventory.CrossCutting.Exceptions;
 using Inventory.Infrastructure;
 using Inventory.Infrastructure.Events;
 using Inventory.Infrastructure.Persistence;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -15,6 +17,22 @@ services
     .AddApiServices()
     .AddInfrastructureServices(configuration)
     .AddApplicationServices();
+
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracerProviderBuilder =>
+    {
+        tracerProviderBuilder
+            .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                .AddService("Inventory.API"))
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddConsoleExporter()
+            .AddJaegerExporter(jaegerOptions =>
+            {
+                jaegerOptions.AgentHost = "jaeger";
+                jaegerOptions.AgentPort = 6831;
+            });
+    });
 
 var app = builder.Build();
 
