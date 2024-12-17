@@ -7,7 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace Inventory.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ItemsController : ControllerBase
 {
     private readonly ILogger<ItemsController> _logger;
