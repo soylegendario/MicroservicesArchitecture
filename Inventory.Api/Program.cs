@@ -1,9 +1,8 @@
 using Inventory.Api;
 using Inventory.Application;
-using Inventory.CrossCutting.Events;
+using Inventory.Application.Events;
 using Inventory.CrossCutting.Exceptions;
 using Inventory.Infrastructure;
-using Inventory.Infrastructure.Events;
 using Inventory.Infrastructure.Persistence;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;

@@ -7,4 +7,8 @@
         <LangVersion>default</LangVersion>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Inventory.CrossCutting.Data\Inventory.CrossCutting.Data.csproj" />
+    </ItemGroup>
+
 </Project>

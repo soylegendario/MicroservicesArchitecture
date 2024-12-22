@@ -1,6 +1,6 @@
+using Inventory.Application.Events;
 using Inventory.CrossCutting.Api.Authentication;
-using Inventory.CrossCutting.Api.HostedServices;
-using Inventory.CrossCutting.Events;
+using Inventory.Infrastructure.Events;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
 

@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Inventory.Application\Inventory.Application.csproj" />
       <ProjectReference Include="..\Inventory.CrossCutting.Cqrs\Inventory.CrossCutting.Cqrs.csproj" />
       <ProjectReference Include="..\Inventory.CrossCutting.Data\Inventory.CrossCutting.Data.csproj" />
       <ProjectReference Include="..\Inventory.CrossCutting.Exceptions\Inventory.CrossCutting.Exceptions.csproj" />
       <ProjectReference Include="..\Inventory.Domain\Inventory.Domain.csproj" />
-      <ProjectReference Include="..\Inventory.Infrastructure.Contracts\Inventory.Infrastructure.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>
