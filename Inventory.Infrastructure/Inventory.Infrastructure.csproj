@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Inventory.CrossCutting.Cqrs\Inventory.CrossCutting.Cqrs.csproj" />
-      <ProjectReference Include="..\Inventory.CrossCutting.Data\Inventory.CrossCutting.Data.csproj" />
-      <ProjectReference Include="..\Inventory.CrossCutting.Exceptions\Inventory.CrossCutting.Exceptions.csproj" />
+      <ProjectReference Include="..\Inventory.Application\Inventory.Application.csproj" />
+      <ProjectReference Include="..\CrossCutting.Cqrs\CrossCutting.Cqrs.csproj" />
+      <ProjectReference Include="..\CrossCutting.Data\CrossCutting.Data.csproj" />
+      <ProjectReference Include="..\CrossCutting.Exceptions\CrossCutting.Exceptions.csproj" />
       <ProjectReference Include="..\Inventory.Domain\Inventory.Domain.csproj" />
-      <ProjectReference Include="..\Inventory.Infrastructure.Contracts\Inventory.Infrastructure.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>

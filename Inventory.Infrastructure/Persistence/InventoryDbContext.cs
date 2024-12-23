@@ -3,13 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Inventory.Infrastructure.Persistence;
 
-public sealed class InventoryDbContext : DbContext
+public sealed class InventoryDbContext(DbContextOptions<InventoryDbContext> options) : DbContext(options)
 {
     public DbSet<Item> Items { get; set; } = null!;
-
-    public InventoryDbContext(DbContextOptions<InventoryDbContext> options) : base(options)
-    {
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

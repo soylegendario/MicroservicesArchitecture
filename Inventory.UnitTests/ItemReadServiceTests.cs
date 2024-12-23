@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
+using CrossCutting.Cqrs.Queries;
 using FluentAssertions;
 using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
+using Inventory.Application.Queries.Item;
 using Inventory.Application.Services;
-using Inventory.CrossCutting.Cqrs.Queries;
 using Inventory.Domain.Items;
-using Inventory.Infrastructure.Persistence;
-using Inventory.Infrastructure.Queries;
 using Moq;
 using Xunit;
 

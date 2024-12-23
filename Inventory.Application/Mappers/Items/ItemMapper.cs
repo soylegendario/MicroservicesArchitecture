@@ -8,34 +8,26 @@ using Microsoft.Extensions.Logging;
 namespace Inventory.Application.Mappers.Items;
 
 
-internal class ItemMapper : IItemMapper
+internal class ItemMapper(ILogger<ItemMapper> logger) : IItemMapper
 {
-    private readonly ILogger<ItemMapper> _logger;
-
-    public ItemMapper(ILogger<ItemMapper> logger)
-    {
-        _logger = logger;
-    }
-    
-
     /// <inheritdoc />
     public ItemDto Map(Item item)
     {
-        _logger.LogInformation("Mapping item to dto");
+        logger.LogInformation("Mapping item to dto");
         return (ItemDto)item;
     }
 
     /// <inheritdoc />
     public IEnumerable<ItemDto> Map(IEnumerable<Item> items)
     {
-        _logger.LogInformation("Mapping items to dto");
+        logger.LogInformation("Mapping items to dto");
         return items.Select(Map).ToList();
     }
 
     /// <inheritdoc />
     public Item Map(ItemDto itemDto)
     {
-        _logger.LogInformation("Mapping dto to item");
+        logger.LogInformation("Mapping dto to item");
         return (Item)itemDto;
     }
 }

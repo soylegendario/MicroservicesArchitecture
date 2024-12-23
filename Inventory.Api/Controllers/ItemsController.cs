@@ -7,20 +7,13 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace Inventory.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class ItemsController : ControllerBase
+[Route("api/[controller]")]
+public class ItemsController(
+    ILogger<ItemsController> logger,
+    IItemReadService itemReadService,
+    IItemWriteService itemWriteService)
+    : ControllerBase
 {
-    private readonly ILogger<ItemsController> _logger;
-    private readonly IItemReadService _itemReadService;
-    private readonly IItemWriteService _itemWriteService;
-
-    public ItemsController(ILogger<ItemsController> logger, IItemReadService itemReadService, IItemWriteService itemWriteService)
-    {
-        _logger = logger;
-        _itemReadService = itemReadService;
-        _itemWriteService = itemWriteService;
-    }
-
     [HttpGet]
     [Authorize]
     [SwaggerOperation("Get all items")]
@@ -29,8 +22,8 @@ public class ItemsController : ControllerBase
     [SwaggerResponse(500, Description = "Unexpected error")]
     public async Task<IActionResult> Get()
     {
-        _logger.LogInformation("GET: /items");
-        var items = await _itemReadService.GetAllItems();
+        logger.LogInformation("GET: /items");
+        var items = await itemReadService.GetAllItems();
         return Ok(items);
     }
     
@@ -43,8 +36,8 @@ public class ItemsController : ControllerBase
     [SwaggerResponse(500, Description = "Unexpected error")]
     public async Task<IActionResult> Post([FromBody] ItemDto item)
     {
-        _logger.LogInformation("POST: /items");
-        await _itemWriteService.AddItemAsync(item);
+        logger.LogInformation("POST: /items");
+        await itemWriteService.AddItemAsync(item);
         return StatusCode(StatusCodes.Status201Created);
     }
     
@@ -58,8 +51,8 @@ public class ItemsController : ControllerBase
     [SwaggerResponse(500, Description = "Unexpected error")]
     public async Task<IActionResult> Delete(string name)
     {
-        _logger.LogInformation("DELETE: /items");
-        await _itemWriteService.RemoveItemByNameAsync(name);
+        logger.LogInformation("DELETE: /items");
+        await itemWriteService.RemoveItemByNameAsync(name);
         return Ok();
     }
 
@@ -73,8 +66,8 @@ public class ItemsController : ControllerBase
     [SwaggerResponse(500, Description = "Unexpected error")]
     public async Task<IActionResult> Update([FromBody] ItemDto item)
     {        
-        _logger.LogInformation("PUT: /items");
-        await _itemWriteService.UpdateItemAsync(item);
+        logger.LogInformation("PUT: /items");
+        await itemWriteService.UpdateItemAsync(item);
         return StatusCode(StatusCodes.Status204NoContent);
     }
 }

@@ -1,6 +1,3 @@
-using AutoFixture;
-using AutoFixture.AutoMoq;
-using AutoFixture.Xunit2;
 using FluentAssertions;
 using Inventory.Application.Mappers.Items;
 using Inventory.Domain.Items;
