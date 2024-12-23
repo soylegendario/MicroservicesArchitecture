@@ -3,9 +3,9 @@ using CrossCutting.Data;
 using Inventory.Domain.Items;
 using Microsoft.Extensions.Logging;
 
-namespace Inventory.Application.Queries;
+namespace Inventory.Application.Queries.Item;
 
-internal class GetAllItemsQueryHandler : IQueryHandler<GetAllItemsQuery, IEnumerable<Item>>
+internal class GetAllItemsQueryHandler : IQueryHandler<GetAllItemsQuery, IEnumerable<Domain.Items.Item>>
 {
     private readonly ILogger<GetAllItemsQueryHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
@@ -16,7 +16,7 @@ internal class GetAllItemsQueryHandler : IQueryHandler<GetAllItemsQuery, IEnumer
         _unitOfWork = unitOfWork;
     }
 
-    public Task<IEnumerable<Item>> HandleAsync(GetAllItemsQuery query, CancellationToken cancellation = default)
+    public Task<IEnumerable<Domain.Items.Item>> HandleAsync(GetAllItemsQuery query, CancellationToken cancellation = default)
     {
         _logger.LogInformation("GetAllItemsQueryHandler: Handling GetAllItemsQuery");
         return Task.FromResult(_unitOfWork.Repository<IItemRepository>().GetAllItems());

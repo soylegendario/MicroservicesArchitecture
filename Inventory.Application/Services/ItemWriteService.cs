@@ -1,6 +1,6 @@
 using CrossCutting.Cqrs.Commands;
 using FluentValidation;
-using Inventory.Application.Commands;
+using Inventory.Application.Commands.Item;
 using Inventory.Application.Contracts;
 using Inventory.Application.Dto;
 using Inventory.Application.Events;

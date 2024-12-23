@@ -1,6 +1,6 @@
 using CrossCutting.Cqrs.Queries;
 
-namespace Inventory.Application.Queries;
+namespace Inventory.Application.Queries.Item;
 
 public class GetItemsByExpirationDateQuery : IQuery
 {

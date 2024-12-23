@@ -3,9 +3,9 @@ using CrossCutting.Data;
 using Inventory.Domain.Items;
 using Microsoft.Extensions.Logging;
 
-namespace Inventory.Application.Queries;
+namespace Inventory.Application.Queries.Item;
 
-internal class GetItemsByExpirationDateQueryHandler : IQueryHandler<GetItemsByExpirationDateQuery, IEnumerable<Item>>
+internal class GetItemsByExpirationDateQueryHandler : IQueryHandler<GetItemsByExpirationDateQuery, IEnumerable<Domain.Items.Item>>
 {
     private readonly ILogger<GetItemsByExpirationDateQueryHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
@@ -16,7 +16,7 @@ internal class GetItemsByExpirationDateQueryHandler : IQueryHandler<GetItemsByEx
         _unitOfWork = unitOfWork;
     }
 
-    public Task<IEnumerable<Item>> HandleAsync(GetItemsByExpirationDateQuery query, CancellationToken cancellation = default)
+    public Task<IEnumerable<Domain.Items.Item>> HandleAsync(GetItemsByExpirationDateQuery query, CancellationToken cancellation = default)
     {
         _logger.LogInformation("GetItemsByExpirationDateQueryHandler: Handling GetItemsByExpirationDateQuery");
         var items = _unitOfWork.Repository<IItemRepository>().GetItemsByExpirationDate(query.ExpirationDate);

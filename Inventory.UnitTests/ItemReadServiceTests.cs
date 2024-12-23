@@ -7,7 +7,7 @@ using CrossCutting.Cqrs.Queries;
 using FluentAssertions;
 using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
-using Inventory.Application.Queries;
+using Inventory.Application.Queries.Item;
 using Inventory.Application.Services;
 using Inventory.Domain.Items;
 using Moq;

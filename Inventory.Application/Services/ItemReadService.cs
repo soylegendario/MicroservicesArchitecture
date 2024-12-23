@@ -4,7 +4,7 @@ using Inventory.Application.Contracts;
 using Inventory.Application.Dto;
 using Inventory.Application.Events;
 using Inventory.Application.Mappers.Items;
-using Inventory.Application.Queries;
+using Inventory.Application.Queries.Item;
 using Inventory.Domain.Items;
 using Microsoft.Extensions.Logging;
 

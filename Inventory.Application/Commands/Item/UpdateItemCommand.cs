@@ -1,10 +1,9 @@
 ﻿using CrossCutting.Cqrs.Commands;
-using Inventory.Domain.Items;
 
-namespace Inventory.Application.Commands;
+namespace Inventory.Application.Commands.Item;
 
 public class UpdateItemCommand : ICommand
 {
-    public Item Item { get; set; }
+    public Domain.Items.Item Item { get; set; }
 
 }

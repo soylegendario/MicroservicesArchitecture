@@ -1,11 +1,11 @@
 using CrossCutting.Cqrs.Commands;
 using CrossCutting.Cqrs.Queries;
 using FluentValidation;
-using Inventory.Application.Commands;
+using Inventory.Application.Commands.Item;
 using Inventory.Application.Contracts;
 using Inventory.Application.Dto;
 using Inventory.Application.Mappers.Items;
-using Inventory.Application.Queries;
+using Inventory.Application.Queries.Item;
 using Inventory.Application.Services;
 using Inventory.Application.Validators;
 using Inventory.Domain.Items;

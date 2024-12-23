@@ -3,7 +3,7 @@ using CrossCutting.Data;
 using Inventory.Domain.Items;
 using Microsoft.Extensions.Logging;
 
-namespace Inventory.Application.Commands;
+namespace Inventory.Application.Commands.Item;
 
 internal class RemoveItemByNameCommandHandler : ICommandHandler<RemoveItemByNameCommand>
 {

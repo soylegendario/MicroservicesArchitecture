@@ -6,7 +6,7 @@ using CrossCutting.Cqrs.Commands;
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
-using Inventory.Application.Commands;
+using Inventory.Application.Commands.Item;
 using Inventory.Application.Dto;
 using Inventory.Application.Exceptions;
 using Inventory.Application.Services;
