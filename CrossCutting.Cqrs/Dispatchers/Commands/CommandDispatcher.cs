@@ -2,16 +2,12 @@
 
 namespace CrossCutting.Cqrs.Commands;
 
-public class CommandDispatcher : ICommandDispatcher
+public class CommandDispatcher(IServiceProvider serviceProvider) : ICommandDispatcher
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public CommandDispatcher(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
-
     public Task DispatchAsync<TCommand>(TCommand command, CancellationToken cancellation = default)
         where TCommand : ICommand
     {
-        var handler = _serviceProvider.GetRequiredService<ICommandHandler<TCommand>>();
+        var handler = serviceProvider.GetRequiredService<ICommandHandler<TCommand>>();
         return handler.HandleAsync(command, cancellation);
     }
 }

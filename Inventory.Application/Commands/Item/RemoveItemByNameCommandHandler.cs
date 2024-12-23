@@ -5,21 +5,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Application.Commands.Item;
 
-internal class RemoveItemByNameCommandHandler : ICommandHandler<RemoveItemByNameCommand>
+internal class RemoveItemByNameCommandHandler(ILogger<RemoveItemByNameCommandHandler> logger, IUnitOfWork unitOfWork)
+    : ICommandHandler<RemoveItemByNameCommand>
 {
-    private readonly ILogger<RemoveItemByNameCommandHandler> _logger;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public RemoveItemByNameCommandHandler(ILogger<RemoveItemByNameCommandHandler> logger, IUnitOfWork unitOfWork)
-    {
-        _logger = logger;
-        _unitOfWork = unitOfWork;
-    }
-
     public Task HandleAsync(RemoveItemByNameCommand command, CancellationToken cancellation = default)
     {
-        _logger.LogInformation("Removing item by name: {Name}", command.Name);
-        _unitOfWork.Repository<IItemRepository>().RemoveItemByName(command.Name);
-        return _unitOfWork.SaveChangesAsync();
+        logger.LogInformation("Removing item by name: {Name}", command.Name);
+        unitOfWork.Repository<IItemRepository>().RemoveItemByName(command.Name);
+        return unitOfWork.SaveChangesAsync();
     }
 }

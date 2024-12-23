@@ -5,12 +5,7 @@ namespace Inventory.Infrastructure.Events;
 public class EventBus : IEventBus
 {
     
-    private readonly Dictionary<Type, List<Delegate>> _subscribers;
-
-    public EventBus()
-    {
-        _subscribers = new Dictionary<Type, List<Delegate>>();
-    }
+    private readonly Dictionary<Type, List<Delegate>> _subscribers = new();
 
     public void Publish<T>(T message)
     {

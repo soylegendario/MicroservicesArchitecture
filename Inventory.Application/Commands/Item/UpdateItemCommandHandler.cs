@@ -5,24 +5,16 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Application.Commands.Item;
 
-public class UpdateItemCommandHandler : ICommandHandler<UpdateItemCommand>
+public class UpdateItemCommandHandler(ILogger<UpdateItemCommandHandler> logger, IUnitOfWork unitOfWork)
+    : ICommandHandler<UpdateItemCommand>
 {
-    private readonly ILogger<UpdateItemCommandHandler> _logger;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public UpdateItemCommandHandler(ILogger<UpdateItemCommandHandler> logger, IUnitOfWork unitOfWork)
-    {
-        _logger = logger;
-        _unitOfWork = unitOfWork;
-    }
-
     public Task HandleAsync(UpdateItemCommand command, CancellationToken cancellation = default)
     {
-        _logger.LogInformation("Update item {Id} with Name: {Name} and ExpirationDate {ExpirationDate}",
+        logger.LogInformation("Update item {Id} with Name: {Name} and ExpirationDate {ExpirationDate}",
             command.Item.Id,
             command.Item.Name,
             command.Item.ExpirationDate);
-        _unitOfWork.Repository<IItemRepository>().UpdateItem(command.Item);
-        return _unitOfWork.SaveChangesAsync();
+        unitOfWork.Repository<IItemRepository>().UpdateItem(command.Item);
+        return unitOfWork.SaveChangesAsync();
     }
 }

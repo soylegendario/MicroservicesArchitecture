@@ -4,22 +4,16 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Application.HostedServices;
 
-public sealed class ExpiredItemsNotificatorHostedService : IHostedService, IDisposable
+public sealed class ExpiredItemsNotificatorHostedService(
+    IItemReadService itemReadService,
+    ILogger<ExpiredItemsNotificatorHostedService> logger)
+    : IHostedService, IDisposable
 {
-    private readonly IItemReadService _itemReadService;
-    private readonly ILogger<ExpiredItemsNotificatorHostedService> _logger;
     private Timer? _timer;
-
-    public ExpiredItemsNotificatorHostedService(IItemReadService itemReadService,
-        ILogger<ExpiredItemsNotificatorHostedService> logger)
-    {
-        _itemReadService = itemReadService;
-        _logger = logger;
-    }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Initializing hosted service");
+        logger.LogInformation("Initializing hosted service");
         _timer = new Timer(Notify, null, TimeSpan.Zero, TimeSpan.FromHours(24));
         return Task.CompletedTask;
     }
@@ -38,7 +32,7 @@ public sealed class ExpiredItemsNotificatorHostedService : IHostedService, IDisp
 
     private async void Notify(object? state)
     {
-        var itemsNotified = await _itemReadService.NotifyExpiredItems();
-        _logger.LogInformation("{ItemsNotified} items have been notified", itemsNotified);
+        var itemsNotified = await itemReadService.NotifyExpiredItems();
+        logger.LogInformation("{ItemsNotified} items have been notified", itemsNotified);
     }
 }

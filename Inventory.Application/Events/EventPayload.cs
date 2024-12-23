@@ -1,15 +1,8 @@
 namespace Inventory.Application.Events;
 
-public class EventPayload<T>
+public class EventPayload<T>(T @event)
 {
-    public EventPayload(T @event)
-    {
-        Event = @event; 
-        Timestamp = DateTime.UtcNow;
-    }
-    
-    public T Event { get; }
-    
-    public DateTime Timestamp { get; }
-    
+    public T Event { get; } = @event;
+
+    public DateTime Timestamp { get; } = DateTime.UtcNow;
 }

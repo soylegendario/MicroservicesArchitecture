@@ -12,43 +12,32 @@ using Microsoft.Extensions.Logging;
 [assembly: InternalsVisibleTo("Inventory.UnitTests")]
 namespace Inventory.Application.Services;
 
-internal class ItemReadService : IItemReadService
+internal class ItemReadService(
+    ILogger<ItemReadService> logger,
+    IQueryDispatcher queryDispatcher,
+    IItemMapper itemMapper,
+    IEventBus eventBus)
+    : IItemReadService
 {
-    private readonly ILogger<ItemReadService> _logger;
-    private readonly IQueryDispatcher _queryDispatcher;
-    private readonly IItemMapper _itemMapper;
-    private readonly IEventBus _eventBus;
-
-    public ItemReadService(ILogger<ItemReadService> logger,
-        IQueryDispatcher queryDispatcher,
-        IItemMapper itemMapper,
-        IEventBus eventBus)
-    {
-        _logger = logger;
-        _queryDispatcher = queryDispatcher;
-        _itemMapper = itemMapper;
-        _eventBus = eventBus;
-    }
-
     /// <inheritdoc />
     public async Task<IEnumerable<ItemDto>> GetAllItems()
     {
-        _logger.LogInformation("Getting all items");
-        var items = await _queryDispatcher
+        logger.LogInformation("Getting all items");
+        var items = await queryDispatcher
             .DispatchAsync<GetAllItemsQuery, IEnumerable<Item>>(new GetAllItemsQuery());
-        return _itemMapper.Map(items);
+        return itemMapper.Map(items);
     }
 
     /// <inheritdoc />
     public async Task<int> NotifyExpiredItems()
     {
-        _logger.LogInformation("Notifying expired items");
+        logger.LogInformation("Notifying expired items");
         var query = new GetItemsByExpirationDateQuery
         {
             ExpirationDate = DateTime.UtcNow.AddDays(-1)
         };
         var expiredItems =
-            (await _queryDispatcher.DispatchAsync<GetItemsByExpirationDateQuery, IEnumerable<Item>>(query)).ToArray();
+            (await queryDispatcher.DispatchAsync<GetItemsByExpirationDateQuery, IEnumerable<Item>>(query)).ToArray();
         foreach (var item in expiredItems)
         {
             var eventData = new ItemExpiredEvent
@@ -56,7 +45,7 @@ internal class ItemReadService : IItemReadService
                 Name = item.Name,
                 ExpirationDate = item.ExpirationDate
             };
-            _eventBus.Publish(eventData);
+            eventBus.Publish(eventData);
         }
         return expiredItems.Length;
     }

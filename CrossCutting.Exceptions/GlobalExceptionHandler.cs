@@ -5,26 +5,17 @@ using Microsoft.Extensions.Logging;
 
 namespace CrossCutting.Exceptions;
 
-public class GlobalExceptionHandler
+public class GlobalExceptionHandler(RequestDelegate next, ILogger<GlobalExceptionHandler> logger)
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger<GlobalExceptionHandler> _logger;
-
-    public GlobalExceptionHandler(RequestDelegate next, ILogger<GlobalExceptionHandler> logger)
-    {
-        _next = next;
-        _logger = logger;
-    }
-
     public async Task Invoke(HttpContext context)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Exception Message: {Message}", ex.Message);
+            logger.LogError(ex, "Exception Message: {Message}", ex.Message);
             var response = context.Response;
             response.ContentType = "application/json";
 
