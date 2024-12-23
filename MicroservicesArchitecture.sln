@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+#
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Domain", "Inventory.Domain\Inventory.Domain.csproj", "{619AB9B4-10CD-486A-A22B-A908B2ACBBEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Application", "Inventory.Application\Inventory.Application.csproj", "{CA2EAE52-34FF-4A42-8C91-7A8A72F985A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Infrastructure", "Inventory.Infrastructure\Inventory.Infrastructure.csproj", "{7B090458-55AC-48AF-9714-DBD77BDEEA69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.UnitTests", "Inventory.UnitTests\Inventory.UnitTests.csproj", "{C6813F25-4E65-44AB-B1D5-4D0075232215}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Api", "Inventory.Api\Inventory.Api.csproj", "{6D882561-5C9B-41BD-800D-52016403D3B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossCutting.Api.Authentication", "CrossCutting.Api.Authentication\CrossCutting.Api.Authentication.csproj", "{0ABF3605-8771-474F-81CE-2F7DF5F1D632}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossCutting.Cqrs", "CrossCutting.Cqrs\CrossCutting.Cqrs.csproj", "{A315BDC2-8A65-423D-A3A4-C5DD89D07263}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossCutting.Exceptions", "CrossCutting.Exceptions\CrossCutting.Exceptions.csproj", "{96892749-31E3-429B-AD33-698CC613EC42}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrossCutting", "CrossCutting", "{2E815CA7-9742-454A-BC70-75D598D3FD2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossCutting.Data", "CrossCutting.Data\CrossCutting.Data.csproj", "{FD1DCCB6-EF2C-41BA-A7E2-FDF24AE36908}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{002D74E8-4631-426A-9CC7-4DCC8060D5FF}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{01764F57-2CEC-4EDE-8A3E-F8D362A81912}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{619AB9B4-10CD-486A-A22B-A908B2ACBBEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{619AB9B4-10CD-486A-A22B-A908B2ACBBEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{619AB9B4-10CD-486A-A22B-A908B2ACBBEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{619AB9B4-10CD-486A-A22B-A908B2ACBBEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA2EAE52-34FF-4A42-8C91-7A8A72F985A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA2EAE52-34FF-4A42-8C91-7A8A72F985A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA2EAE52-34FF-4A42-8C91-7A8A72F985A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA2EAE52-34FF-4A42-8C91-7A8A72F985A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B090458-55AC-48AF-9714-DBD77BDEEA69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B090458-55AC-48AF-9714-DBD77BDEEA69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B090458-55AC-48AF-9714-DBD77BDEEA69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B090458-55AC-48AF-9714-DBD77BDEEA69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6813F25-4E65-44AB-B1D5-4D0075232215}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6813F25-4E65-44AB-B1D5-4D0075232215}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6813F25-4E65-44AB-B1D5-4D0075232215}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6813F25-4E65-44AB-B1D5-4D0075232215}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D882561-5C9B-41BD-800D-52016403D3B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D882561-5C9B-41BD-800D-52016403D3B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D882561-5C9B-41BD-800D-52016403D3B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D882561-5C9B-41BD-800D-52016403D3B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ABF3605-8771-474F-81CE-2F7DF5F1D632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ABF3605-8771-474F-81CE-2F7DF5F1D632}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ABF3605-8771-474F-81CE-2F7DF5F1D632}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ABF3605-8771-474F-81CE-2F7DF5F1D632}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A315BDC2-8A65-423D-A3A4-C5DD89D07263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A315BDC2-8A65-423D-A3A4-C5DD89D07263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A315BDC2-8A65-423D-A3A4-C5DD89D07263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A315BDC2-8A65-423D-A3A4-C5DD89D07263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96892749-31E3-429B-AD33-698CC613EC42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96892749-31E3-429B-AD33-698CC613EC42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96892749-31E3-429B-AD33-698CC613EC42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96892749-31E3-429B-AD33-698CC613EC42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD1DCCB6-EF2C-41BA-A7E2-FDF24AE36908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD1DCCB6-EF2C-41BA-A7E2-FDF24AE36908}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD1DCCB6-EF2C-41BA-A7E2-FDF24AE36908}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD1DCCB6-EF2C-41BA-A7E2-FDF24AE36908}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A315BDC2-8A65-423D-A3A4-C5DD89D07263} = {2E815CA7-9742-454A-BC70-75D598D3FD2B}
+		{96892749-31E3-429B-AD33-698CC613EC42} = {2E815CA7-9742-454A-BC70-75D598D3FD2B}
+		{0ABF3605-8771-474F-81CE-2F7DF5F1D632} = {2E815CA7-9742-454A-BC70-75D598D3FD2B}
+		{FD1DCCB6-EF2C-41BA-A7E2-FDF24AE36908} = {2E815CA7-9742-454A-BC70-75D598D3FD2B}
+		{6D882561-5C9B-41BD-800D-52016403D3B2} = {01764F57-2CEC-4EDE-8A3E-F8D362A81912}
+		{CA2EAE52-34FF-4A42-8C91-7A8A72F985A8} = {01764F57-2CEC-4EDE-8A3E-F8D362A81912}
+		{619AB9B4-10CD-486A-A22B-A908B2ACBBEF} = {01764F57-2CEC-4EDE-8A3E-F8D362A81912}
+		{7B090458-55AC-48AF-9714-DBD77BDEEA69} = {01764F57-2CEC-4EDE-8A3E-F8D362A81912}
+		{C6813F25-4E65-44AB-B1D5-4D0075232215} = {01764F57-2CEC-4EDE-8A3E-F8D362A81912}
+	EndGlobalSection
+EndGlobal

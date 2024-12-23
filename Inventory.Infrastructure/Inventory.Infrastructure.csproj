@@ -9,9 +9,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Inventory.Application\Inventory.Application.csproj" />
-      <ProjectReference Include="..\Inventory.CrossCutting.Cqrs\Inventory.CrossCutting.Cqrs.csproj" />
-      <ProjectReference Include="..\Inventory.CrossCutting.Data\Inventory.CrossCutting.Data.csproj" />
-      <ProjectReference Include="..\Inventory.CrossCutting.Exceptions\Inventory.CrossCutting.Exceptions.csproj" />
+      <ProjectReference Include="..\CrossCutting.Cqrs\CrossCutting.Cqrs.csproj" />
+      <ProjectReference Include="..\CrossCutting.Data\CrossCutting.Data.csproj" />
+      <ProjectReference Include="..\CrossCutting.Exceptions\CrossCutting.Exceptions.csproj" />
       <ProjectReference Include="..\Inventory.Domain\Inventory.Domain.csproj" />
     </ItemGroup>
 

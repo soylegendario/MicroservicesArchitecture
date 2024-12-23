@@ -1,4 +1,4 @@
-using Inventory.CrossCutting.Data;
+using CrossCutting.Data;
 
 namespace Inventory.Domain.Items;
 

@@ -21,8 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Inventory.CrossCutting.Api.Authentication\Inventory.CrossCutting.Api.Authentication.csproj" />
-      <ProjectReference Include="..\Inventory.CrossCutting.Api.HostedServices\Inventory.CrossCutting.Api.HostedServices.csproj" />
+      <ProjectReference Include="..\CrossCutting.Api.Authentication\CrossCutting.Api.Authentication.csproj" />
       <ProjectReference Include="..\Inventory.Application\Inventory.Application.csproj" />
       <ProjectReference Include="..\Inventory.Infrastructure\Inventory.Infrastructure.csproj" />
     </ItemGroup>

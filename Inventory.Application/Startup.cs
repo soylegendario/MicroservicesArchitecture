@@ -1,3 +1,5 @@
+using CrossCutting.Cqrs.Commands;
+using CrossCutting.Cqrs.Queries;
 using FluentValidation;
 using Inventory.Application.Commands;
 using Inventory.Application.Contracts;
@@ -6,8 +8,6 @@ using Inventory.Application.Mappers.Items;
 using Inventory.Application.Queries;
 using Inventory.Application.Services;
 using Inventory.Application.Validators;
-using Inventory.CrossCutting.Cqrs.Commands;
-using Inventory.CrossCutting.Cqrs.Queries;
 using Inventory.Domain.Items;
 using Microsoft.Extensions.DependencyInjection;
 

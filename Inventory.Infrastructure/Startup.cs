@@ -1,7 +1,6 @@
-using Inventory.Application.Queries;
-using Inventory.CrossCutting.Cqrs.Commands;
-using Inventory.CrossCutting.Cqrs.Queries;
-using Inventory.CrossCutting.Data;
+using CrossCutting.Cqrs.Commands;
+using CrossCutting.Cqrs.Queries;
+using CrossCutting.Data;
 using Inventory.Domain.Items;
 using Inventory.Infrastructure.Persistence;
 using Inventory.Infrastructure.Repositories;

@@ -1,18 +1,16 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
+using CrossCutting.Cqrs.Commands;
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
 using Inventory.Application.Commands;
 using Inventory.Application.Dto;
+using Inventory.Application.Exceptions;
 using Inventory.Application.Services;
-using Inventory.CrossCutting.Cqrs.Commands;
-using Inventory.CrossCutting.Exceptions;
 using Inventory.Domain.Items;
-using Inventory.Infrastructure.Persistence;
 using Moq;
 using Xunit;
 

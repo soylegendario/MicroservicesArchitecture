@@ -1,5 +1,5 @@
-﻿using Inventory.CrossCutting.Data;
-using Inventory.CrossCutting.Exceptions;
+﻿using CrossCutting.Data;
+using Inventory.Application.Exceptions;
 using Inventory.Domain.Items;
 using Microsoft.EntityFrameworkCore;
 

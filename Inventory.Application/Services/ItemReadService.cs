@@ -1,10 +1,10 @@
 using System.Runtime.CompilerServices;
+using CrossCutting.Cqrs.Queries;
 using Inventory.Application.Contracts;
 using Inventory.Application.Dto;
 using Inventory.Application.Events;
 using Inventory.Application.Mappers.Items;
 using Inventory.Application.Queries;
-using Inventory.CrossCutting.Cqrs.Queries;
 using Inventory.Domain.Items;
 using Microsoft.Extensions.Logging;
 

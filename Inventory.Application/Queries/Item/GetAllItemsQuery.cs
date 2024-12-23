@@ -1,4 +1,4 @@
-using Inventory.CrossCutting.Cqrs.Queries;
+using CrossCutting.Cqrs.Queries;
 
 namespace Inventory.Application.Queries;
 

@@ -1,5 +1,5 @@
-﻿using Inventory.CrossCutting.Cqrs.Commands;
-using Inventory.CrossCutting.Data;
+﻿using CrossCutting.Cqrs.Commands;
+using CrossCutting.Data;
 using Inventory.Domain.Items;
 using Microsoft.Extensions.Logging;
 
