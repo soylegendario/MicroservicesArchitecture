@@ -6,7 +6,7 @@ using Microsoft.OpenApi.Models;
 
 namespace Inventory.Api;
 
-public static class Startup
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApiServices(this IServiceCollection services)
     {
