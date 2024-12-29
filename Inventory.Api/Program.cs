@@ -4,6 +4,7 @@ using Inventory.Application;
 using Inventory.Application.Events;
 using Inventory.Infrastructure;
 using Inventory.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
@@ -25,6 +26,11 @@ builder.Services.AddOpenTelemetry()
                 .AddService("Inventory.API"))
             .AddAspNetCoreInstrumentation()
             .AddHttpClientInstrumentation()
+            .AddSqlClientInstrumentation(options =>
+            {
+                options.SetDbStatementForText = true; 
+                options.RecordException = true;
+            })
             .AddConsoleExporter()
             .AddJaegerExporter(jaegerOptions =>
             {
@@ -48,11 +54,16 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<GlobalExceptionHandler>();
 
-// Subscribe to events
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<InventoryDbContext>();
-    context.Database.EnsureCreated();
+    var pendingMigrations = context.Database.GetPendingMigrations().ToArray();
+
+    if (pendingMigrations.Length != 0)
+    {
+        Console.WriteLine("There are pending migrations:");
+        context.Database.Migrate();
+    }
     
     var eventBus = scope.ServiceProvider.GetRequiredService<IEventBus>();
     eventBus.Subscribe<ItemRemovedEvent>(payload =>
