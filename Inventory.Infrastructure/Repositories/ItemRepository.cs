@@ -39,4 +39,14 @@ public class ItemRepository : BaseRepository, IItemRepository
     {
         Context.Update(item);
     }
+    
+    public async Task<Item> GetItemByIdAsync(Guid id)
+    {
+        var item = await Items.FirstOrDefaultAsync(i => i.Id == id);
+        if (item == null)
+        {
+            throw new ItemNotFoundException($"Item with ID {id} not found");
+        }
+        return item;
+    }
 }

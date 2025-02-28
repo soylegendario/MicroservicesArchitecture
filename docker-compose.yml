@@ -13,6 +13,16 @@
     ports:
       - "57000:8080"
       - "57100:443"
+      - "9229:9229" 
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+      - DOTNET_HOST_PATH=/usr/share/dotnet/dotnet
+      - DOTNET_RUNNING_IN_CONTAINER=true
+    volumes:
+      - .:/app
+    depends_on:
+        - db
+        - jaeger
     build:
       context: .
       dockerfile: Inventory.Api/Dockerfile

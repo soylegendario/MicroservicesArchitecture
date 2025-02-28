@@ -1,5 +1,3 @@
 ﻿namespace CrossCutting.Cqrs.Queries;
 
-public interface IQuery
-{
-}
+public interface IQuery;

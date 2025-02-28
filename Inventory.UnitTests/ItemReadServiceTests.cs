@@ -6,6 +6,7 @@ using AutoFixture.Xunit2;
 using CrossCutting.Cqrs.Queries;
 using FluentAssertions;
 using Inventory.Application.Dto;
+using Inventory.Application.Exceptions;
 using Inventory.Application.Mappers.Items;
 using Inventory.Application.Queries.Item;
 using Inventory.Application.Services;
@@ -56,5 +57,28 @@ public class ItemReadServiceTests
 
         // Assert
         Assert.Equal(1, expiredItems);
+    }
+    
+    [Theory]
+    [AutoMoqData]
+    internal async Task GetItemById_ItemNotFound_ThrowsException(
+        Guid itemId,
+        [Frozen] Mock<IQueryDispatcher> queryDispatcher,
+        ItemReadService sut)
+    {
+        // Arrange
+        var query = new GetItemByIdQuery { Id = itemId };
+        queryDispatcher.Setup(mock =>
+                mock.DispatchAsync<GetItemByIdQuery, Item>(
+                    It.IsAny<GetItemByIdQuery>(),
+                    It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new ItemNotFoundException($"Item with ID {itemId} not found"));
+
+        // Act
+        Func<Task> act = async () => await sut.GetItemByIdAsync(query.Id);
+
+        // Assert
+        await act.Should().ThrowAsync<ItemNotFoundException>()
+            .WithMessage($"Item with ID {itemId} not found");
     }
 }

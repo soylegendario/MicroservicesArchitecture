@@ -49,4 +49,10 @@ internal class ItemReadService(
         }
         return expiredItems.Length;
     }
-}
+
+public async Task<ItemDto?> GetItemByIdAsync(Guid id)
+{
+    logger.LogInformation("Getting item by ID: {Id}", id);
+    var item = await queryDispatcher.DispatchAsync<GetItemByIdQuery, Item>(new GetItemByIdQuery { Id = id });
+    return item == null ? null : itemMapper.Map(item);
+}}
