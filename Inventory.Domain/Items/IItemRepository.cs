@@ -13,4 +13,6 @@ public interface IItemRepository : IRepository
     void RemoveItemByName(string name);
     
     void UpdateItem(Item item);
+    
+    Task<Item> GetItemByIdAsync(Guid id);
 }

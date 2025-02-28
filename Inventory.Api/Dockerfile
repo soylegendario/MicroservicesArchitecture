@@ -7,6 +7,14 @@ ENV ASPNETCORE_URLS http://*:80
 EXPOSE 80
 EXPOSE 443
 WORKDIR /src
+
+ENV DOTNET_USE_POLLING_FILE_WATCHER 1
+ENV DOTNET_HOST_PATH /usr/share/dotnet/dotnet
+ENV DOTNET_RUNNING_IN_CONTAINER true
+# Habilita el servidor de depuración
+ENV DOTNET_MODIFIABLE_ASSEMBLIES debug
+EXPOSE 5000 5001 5004 9229
+
 COPY ["Inventory.Api/Inventory.Api.csproj", "Inventory.Api/"]
 COPY ["CrossCutting.Api.Authentication/CrossCutting.Api.Authentication.csproj", "CrossCutting.Api.Authentication/"]
 COPY ["CrossCutting.Cqrs/CrossCutting.Cqrs.csproj", "CrossCutting.Cqrs/"]

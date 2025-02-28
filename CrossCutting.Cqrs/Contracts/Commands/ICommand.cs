@@ -1,5 +1,3 @@
 ﻿namespace CrossCutting.Cqrs.Commands;
 
-public interface ICommand
-{
-}
+public interface ICommand;

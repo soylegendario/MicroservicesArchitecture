@@ -2,4 +2,8 @@ using CrossCutting.Cqrs.Queries;
 
 namespace Inventory.Application.Queries.Item;
 
-public class GetAllItemsQuery : IQuery;
+public class GetItemByIdQuery : IQuery
+{
+    public Guid Id { get; set; }
+}
+

@@ -15,4 +15,11 @@ public interface IItemReadService
     /// </summary>
     /// <returns></returns>
     Task<int> NotifyExpiredItems();
+    
+    /// <summary>
+    /// Get item by ID
+    /// </summary>
+    /// <param name="id">The ID of the item</param>
+    /// <returns>The item with the specified ID</returns>
+    Task<ItemDto?> GetItemByIdAsync(Guid id);
 }

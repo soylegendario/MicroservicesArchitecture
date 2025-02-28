@@ -27,6 +27,25 @@ public class ItemsController(
         return Ok(items);
     }
     
+    [HttpGet("{id:guid}")]
+    [Authorize]
+    [SwaggerOperation("Get item by ID")]
+    [SwaggerResponse(200, Description = "Operation success", Type = typeof(ItemDto))]
+    [SwaggerResponse(401, Description = "Unauthorized")]
+    [SwaggerResponse(404, Description = "Not found")]
+    [SwaggerResponse(500, Description = "Unexpected error")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        logger.LogInformation("GET: /items/{Id}", id);
+        var item = await itemReadService.GetItemByIdAsync(id);
+        if (item == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(item);
+    }
+    
     [HttpPost]
     [Authorize]
     [SwaggerOperation("Create a new item")]
