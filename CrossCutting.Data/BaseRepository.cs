@@ -2,12 +2,7 @@
 
 namespace CrossCutting.Data;
 
-public abstract class BaseRepository : IRepository
+public abstract class BaseRepository(DbContext context): IRepository
 {
-    protected DbContext Context { get; set; } = null!;
-
-    public void SetContext(DbContext context)
-    {
-        Context = context;
-    }
+    protected DbContext Context = context;
 }

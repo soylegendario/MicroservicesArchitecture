@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Inventory.Infrastructure.Repositories;
 
-public class ItemRepository : BaseRepository, IItemRepository
+public class ItemRepository(DbContext context) : BaseRepository(context), IItemRepository
 {
     private DbSet<Item> Items => Context.Set<Item>();
     
@@ -16,7 +16,7 @@ public class ItemRepository : BaseRepository, IItemRepository
 
     public IEnumerable<Item> GetAllItems()
     {
-        return Items.ToArray();
+        return [.. Items];
     }
 
     public IEnumerable<Item> GetItemsByExpirationDate(DateTime expirationDate)
