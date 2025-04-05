@@ -1,4 +1,5 @@
 using CrossCutting.Exceptions;
+using FastEndpoints;
 using Inventory.Api;
 using Inventory.Application;
 using Inventory.Application.Events;
@@ -12,6 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false).Build();
+
+services.AddFastEndpoints();
 
 services
     .AddApiServices()
@@ -49,7 +52,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapControllers();
+// app.MapControllers();
+app.UseFastEndpoints();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<GlobalExceptionHandler>();
@@ -65,7 +69,7 @@ using (var scope = app.Services.CreateScope())
         context.Database.Migrate();
     }
     
-    var eventBus = scope.ServiceProvider.GetRequiredService<IEventBus>();
+    var eventBus = scope.ServiceProvider.GetRequiredService<Inventory.Application.Events.IEventBus>();
     eventBus.Subscribe<ItemRemovedEvent>(payload =>
     {
         Console.WriteLine("Item with name {0} has been removed at {1}", payload.Event.Name, payload.Timestamp);
