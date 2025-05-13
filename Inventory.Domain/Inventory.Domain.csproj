@@ -11,4 +11,8 @@
       <ProjectReference Include="..\CrossCutting.Data\CrossCutting.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="UnitOfWorkinator.Abstractions" Version="1.0.2" />
+    </ItemGroup>
+
 </Project>

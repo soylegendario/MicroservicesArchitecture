@@ -1,7 +1,7 @@
 using CrossCutting.Cqrs.Commands;
-using CrossCutting.Data;
 using Inventory.Domain.Items;
 using Microsoft.Extensions.Logging;
+using UnitOfWorkinator.Abstractions;
 
 namespace Inventory.Application.Commands.Item;
 

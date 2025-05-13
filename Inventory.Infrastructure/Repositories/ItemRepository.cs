@@ -1,7 +1,8 @@
-﻿using CrossCutting.Data;
-using Inventory.Application.Exceptions;
+﻿using Inventory.Application.Exceptions;
 using Inventory.Domain.Items;
+using Inventory.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using UnitOfWorkinator.EFCore;
 
 namespace Inventory.Infrastructure.Repositories;
 

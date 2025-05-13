@@ -16,4 +16,8 @@
       <ProjectReference Include="..\Inventory.Domain\Inventory.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="UnitOfWorkinator.EFCore" Version="1.0.2" />
+    </ItemGroup>
+
 </Project>
