@@ -1,4 +1,4 @@
-using CrossCutting.Data;
+using UnitOfWorkinator.Abstractions;
 
 namespace Inventory.Domain.Items;
 
